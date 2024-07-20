@@ -9,7 +9,7 @@ public class ControlPanel extends JPanel {
     public JButton loadButton;
     public JButton clearButton;
     public JButton randomButton;
-
+    //
     private static final String START = "Start";
     private static final String STOP = "Stop";
     private static final String SAVE = "Save";
