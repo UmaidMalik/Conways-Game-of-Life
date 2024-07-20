@@ -1,22 +1,14 @@
 import javax.swing.JPanel;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    //private GameOfLife gameOfLife;
     private Grid grid;
-    private int cellSizeX;
-    private int cellSizeY;
+    private int cellSize;
 
     public GamePanel(Grid grid) {
         this.grid = grid;
-        // TODO will delete 2 lines below
-        setCellSize(1, 1);
-    }
-
-    public void setCellSize(int x, int y){
-        cellSizeX = x;
-        cellSizeY = y;
+        setCellSize(10);
     }
 
     @Override
@@ -25,19 +17,35 @@ public class GamePanel extends JPanel {
         for (int i = 0; i < grid.getWidth(); i++) {
             for (int j = 0; j < grid.getHeight(); j++) {
                 if (grid.getCell(i, j).isAlive()) {
-                    g.fillRect(i, j,  cellSizeX, cellSizeY);
-                    //g.drawRect(i,j,1,1);
+                    g.setColor(Color.BLACK);
+                } else {
+                    g.setColor(Color.WHITE);
                 }
+                g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
+        }
+
+        //drawGridLines();
+    }
+
+
+    protected void drawGridLines() {
+        Graphics g = getGraphics();
+        g.setColor(Color.GRAY);
+        for (int i = 0; i <= grid.getWidth(); i++) {
+            g.drawLine(i * cellSize, 0, i * cellSize, grid.getHeight() * cellSize);
+        }
+        for (int i = 0; i <= grid.getHeight(); i++) {
+            g.drawLine(0, i * cellSize, grid.getWidth() * cellSize, i * cellSize);
         }
     }
 
-    public int getCellSizeX(){
-        return cellSizeX;
+    public int getCellSize() {
+        return cellSize;
     }
 
-    public int getCellSizeY(){
-        return cellSizeY;
+    public void setCellSize(int size){
+        cellSize = size;
     }
 
 }

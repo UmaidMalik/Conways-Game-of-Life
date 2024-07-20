@@ -10,7 +10,7 @@ public class Grid {
         initializeGrid();
     }
 
-    private void initializeGrid() {
+    public void initializeGrid() {
         cells = new Cell[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {

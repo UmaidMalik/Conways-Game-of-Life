@@ -14,7 +14,7 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
 
-        Grid grid = new Grid(10, 200);
+        Grid grid = new Grid(200, 200);
         grid.setCell(2, 4, true);
         grid.setCell(4, 1, true);
         grid.setCell(5, 2, true);
@@ -25,12 +25,16 @@ public class Main {
         grid.setCell(3, 5, true);
         grid.setCell(2, 4, true);
 
+        GamePanel gamePanel = new GamePanel(grid);
+        frame.add(gamePanel);
+
 
         while (true) {
             grid.printGrid();
             grid.update();
+            gamePanel.paintComponent(frame.getGraphics());
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
