@@ -14,7 +14,7 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
 
-        Grid grid = new Grid(200, 200);
+        Grid grid = new Grid(400, 300);
         grid.setCell(2, 4, true);
         grid.setCell(4, 1, true);
         grid.setCell(5, 2, true);
