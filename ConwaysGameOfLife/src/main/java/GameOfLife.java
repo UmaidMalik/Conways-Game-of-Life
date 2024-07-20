@@ -4,14 +4,13 @@ public class GameOfLife {
     private int generation;
     private static GameOfLife gameOfLife;
 
-    private GameOfLife(int width, int height) {
-        grid = new Grid(width, height);
+    private GameOfLife() {
         generation = 0;
     }
 
-    public static GameOfLife getInstanceOfGameOfLife(int width, int height) {
+    public static GameOfLife getInstance() {
         if (gameOfLife == null) {
-            gameOfLife = new GameOfLife(width, height);
+            gameOfLife = new GameOfLife();
         }
         return gameOfLife;
     }
@@ -21,8 +20,16 @@ public class GameOfLife {
         generation++;
     }
 
+    public void createGrid(int width, int height) {
+        grid = new Grid(width, height);
+    }
+
     public Grid getGrid() {
         return grid;
+    }
+
+    public void setGrid(Grid grid) {
+        this.grid = grid;
     }
 
     public int getGeneration() {

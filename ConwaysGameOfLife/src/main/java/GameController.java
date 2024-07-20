@@ -47,6 +47,9 @@ public class GameController implements ActionListener {
 
     public void start() {
         System.out.println("Start button clicked");
+        gameOfLife.nextGeneration();
+        gamePanel.repaint();
+        controlPanel.addControlListener(this);
     }
 
     public void stop() {
