@@ -11,6 +11,8 @@ public class MouseHandler extends MouseAdapter {
         this.gamePanel = gamePanel;
     }
 
+    //public void linkDependies()
+
     @Override
     public void mouseClicked(MouseEvent e) {
         int x = e.getX() / gamePanel.getCellSizeX();

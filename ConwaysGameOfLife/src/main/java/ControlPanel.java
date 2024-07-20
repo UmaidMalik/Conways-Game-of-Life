@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ControlPanel extends JPanel implements ActionListener {
+public class ControlPanel extends JPanel {
     public JButton startButton;
     public JButton stopButton;
     public JButton saveButton;
@@ -17,18 +17,18 @@ public class ControlPanel extends JPanel implements ActionListener {
     private static final String CLEAR = "Clear";
     private static final String RANDOM = "Random";
 
-    private Timer timer;
-    private GameOfLife gameOfLife;
+    //private Timer timer;
+    //private GameOfLife gameOfLife;
 
-    public ControlPanel(Timer timer, GameOfLife gameOfLife) {
+    public ControlPanel(/*Timer timer, GameOfLife gameOfLife*/) {
         startButton = new JButton(START);
         stopButton = new JButton(STOP);
         saveButton = new JButton(SAVE);
         loadButton = new JButton(LOAD);
         clearButton = new JButton(CLEAR);
         randomButton = new JButton(RANDOM);
-        this.timer = timer;
-        this.gameOfLife = gameOfLife;
+        //this.timer = timer;
+        //this.gameOfLife = gameOfLife;
     }
 
     public void addControlListener(ActionListener listener) {
@@ -41,6 +41,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 
     }
 
+    /*
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == timer) {
@@ -61,4 +62,5 @@ public class ControlPanel extends JPanel implements ActionListener {
             System.out.println("Random button clicked");
         }
     }
+     */
 }

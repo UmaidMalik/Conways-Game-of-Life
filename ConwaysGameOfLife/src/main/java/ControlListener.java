@@ -8,7 +8,7 @@ public class ControlListener implements ActionListener {
     private Timer timer;
     private GameOfLife gameOfLife;
 
-    ControlListener(ControlPanel controlPanel, Timer timer, ) {
+    ControlListener(ControlPanel controlPanel, Timer timer) {
         this.controlPanel = controlPanel;
         this.timer = timer;
     }
@@ -18,7 +18,7 @@ public class ControlListener implements ActionListener {
         if (e.getSource() == timer) {
             System.out.println("Timer ticked");
             gameOfLife.nextGeneration();
-            gamePanel.repaint();
+            controlPanel.repaint();
 
         } else if (e.getSource() == controlPanel.startButton) {
             System.out.println("Start button clicked");
