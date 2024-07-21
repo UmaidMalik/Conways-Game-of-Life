@@ -11,8 +11,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //GameOfLifeApp.launch();
-
+        GameOfLifeApp.launch();
+        /*
         JFrame frame = new JFrame("Conway's Game of Life");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
@@ -28,10 +28,41 @@ public class Main {
         grid.setCell(4, 5, true);
         grid.setCell(3, 5, true);
         grid.setCell(2, 4, true);
-        GamePanel gamePanel = new GamePanel(grid);
-        //gamePanel.paintComponent(frame.getGraphics());
+
+        grid.setCell(2, 24, true);
+        grid.setCell(4, 21, true);
+        grid.setCell(5, 22, true);
+        grid.setCell(5, 23, true);
+        grid.setCell(5, 24, true);
+        grid.setCell(5, 25, true);
+        grid.setCell(4, 25, true);
+        grid.setCell(3, 25, true);
+        grid.setCell(2, 24, true);
+
+        grid.setCell(32, 4, true);
+        grid.setCell(34, 1, true);
+        grid.setCell(35, 2, true);
+        grid.setCell(35, 3, true);
+        grid.setCell(35, 4, true);
+        grid.setCell(35, 5, true);
+        grid.setCell(34, 5, true);
+        grid.setCell(33, 5, true);
+        grid.setCell(32, 4, true);
+
+        grid.setCell(52, 24, true);
+        grid.setCell(54, 21, true);
+        grid.setCell(55, 22, true);
+        grid.setCell(55, 23, true);
+        grid.setCell(55, 24, true);
+        grid.setCell(55, 25, true);
+        grid.setCell(54, 25, true);
+        grid.setCell(53, 25, true);
+        grid.setCell(52, 24, true);
         GameOfLife gameOfLife = GameOfLife.getInstance();
         gameOfLife.setGrid(grid);
+        GamePanel gamePanel = new GamePanel(gameOfLife);
+
+
 
         // Set layout and add panels
 
@@ -44,9 +75,11 @@ public class Main {
         while (true) {
             //grid.printGrid();
             //grid.update();
-            //gamePanel.repaint();
-            gamePanel.paintComponent(frame.getGraphics());
+
+            //gamePanel.paintComponent(frame.getGraphics());
             gameOfLife.nextGeneration();
+            gamePanel.repaint();
+
 
             try {
                 Thread.sleep(50);
@@ -54,6 +87,9 @@ public class Main {
                 throw new RuntimeException(e);
             }
         }
+
+         */
+
 
 
     }

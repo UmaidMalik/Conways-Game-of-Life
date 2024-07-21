@@ -4,7 +4,6 @@ public class Grid {
 
     private Cell[][] cells;
     private int width, height;
-    private Cell[][] nextGeneration;
 
     public Grid(int width, int height) {
         this.width = width;
@@ -29,48 +28,8 @@ public class Grid {
         cells[x][y].setAlive(isAlive);
     }
 
-    public void update() {
-        createCopyOfGrid();
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                int aliveNeighbours = countAliveNeighbors(i, j);
-                applyGameOfLifeRule(i, j, aliveNeighbours);
-            }
-        }
-        cells = nextGeneration;
-    }
-
-    public int countAliveNeighbors(int i, int j) {
-        int aliveNeighbors = 0;
-        for (int x = i - 1; x <= i + 1; x++) {
-            for (int y = j - 1; y <= j + 1; y++) {
-                if (x >= 0 && x < width && y >= 0 && y < height && !(x == i && y == j) && cells[x][y].isAlive()) {
-                    aliveNeighbors++;
-                }
-            }
-        }
-        return aliveNeighbors;
-    }
-
-    private void applyGameOfLifeRule(int i, int j, int aliveNeighbours) {
-        if (cells[i][j].isAlive()) {
-            if (aliveNeighbours < 2 || aliveNeighbours > 3) {
-                nextGeneration[i][j].setAlive(false);
-            }
-        } else {
-            if (aliveNeighbours == 3) {
-                nextGeneration[i][j].setAlive(true);
-            }
-        }
-    }
-
-    private void createCopyOfGrid() {
-        nextGeneration = new Cell[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                nextGeneration[i][j] = new Cell(cells[i][j].isAlive());
-            }
-        }
+    public void setNewCell(int x, int y, Cell cell) {
+        cells[x][y] = cell;
     }
 
     public void printGrid() {

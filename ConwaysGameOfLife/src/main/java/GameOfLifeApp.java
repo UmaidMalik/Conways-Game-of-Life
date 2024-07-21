@@ -33,10 +33,40 @@ public class GameOfLifeApp implements Runnable {
         grid.setCell(4, 5, true);
         grid.setCell(3, 5, true);
         grid.setCell(2, 4, true);
+
+        grid.setCell(2, 24, true);
+        grid.setCell(4, 21, true);
+        grid.setCell(5, 22, true);
+        grid.setCell(5, 23, true);
+        grid.setCell(5, 24, true);
+        grid.setCell(5, 25, true);
+        grid.setCell(4, 25, true);
+        grid.setCell(3, 25, true);
+        grid.setCell(2, 24, true);
+
+        grid.setCell(32, 4, true);
+        grid.setCell(34, 1, true);
+        grid.setCell(35, 2, true);
+        grid.setCell(35, 3, true);
+        grid.setCell(35, 4, true);
+        grid.setCell(35, 5, true);
+        grid.setCell(34, 5, true);
+        grid.setCell(33, 5, true);
+        grid.setCell(32, 4, true);
+
+        grid.setCell(52, 24, true);
+        grid.setCell(54, 21, true);
+        grid.setCell(55, 22, true);
+        grid.setCell(55, 23, true);
+        grid.setCell(55, 24, true);
+        grid.setCell(55, 25, true);
+        grid.setCell(54, 25, true);
+        grid.setCell(53, 25, true);
+        grid.setCell(52, 24, true);
         GameOfLife gameOfLife = GameOfLife.getInstance();
         ControlPanel controlPanel = new ControlPanel();
         gameOfLife.setGrid(grid);
-        GamePanel gamePanel = new GamePanel(gameOfLife.getGrid());
+        GamePanel gamePanel = new GamePanel(gameOfLife);
         GameController gameController = new GameController(gameOfLife, gamePanel, controlPanel);
         // Set layout and add panels
 
@@ -48,6 +78,30 @@ public class GameOfLifeApp implements Runnable {
         frame.setVisible(true);
 
         gamePanel.paintComponent(frame.getGraphics());
-        gameController.start();
     }
 }
+/*
+JFrame frame = new JFrame("Conway's Game of Life");
+
+
+
+
+
+
+
+
+        while (true) {
+            //grid.printGrid();
+            //grid.update();
+            //gamePanel.repaint();
+            gamePanel.paintComponent(frame.getGraphics());
+            gameOfLife.nextGeneration();
+
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+ */

@@ -9,42 +9,54 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    private Grid grid;
+    private final GameOfLife gameOfLife;
     private int cellSize;
+    private int width, height;
+    private Grid grid;
 
-    public GamePanel(Grid grid) {
-        this.grid = grid;
+    public GamePanel(GameOfLife gameOfLife) {
+        this.gameOfLife = gameOfLife;
+        this.grid = gameOfLife.getGrid();
+        //this.width = grid.getWidth();
+        //this.height = grid.getHeight();
         setCellSize(10);
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        for (int i = 0; i < grid.getWidth(); i++) {
-            for (int j = 0; j < grid.getHeight(); j++) {
-                if (grid.getCell(i, j).isAlive()) {
-                    g.setColor(Color.BLACK);
-                } else {
+
+        for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
+            for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
+                if (gameOfLife.getGrid().getCell(i, j).isAlive()) {
                     g.setColor(Color.WHITE);
+                } else {
+                    g.setColor(Color.BLACK);
                 }
                 g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
         }
-
-        //drawGridLines();
+        //drawGridLines(g);
     }
 
 
-    protected void drawGridLines() {
-        Graphics g = getGraphics();
-        g.setColor(Color.GRAY);
-        for (int i = 0; i <= grid.getWidth(); i++) {
-            g.drawLine(i * cellSize, 0, i * cellSize, grid.getHeight() * cellSize);
-        }
-        for (int i = 0; i <= grid.getHeight(); i++) {
-            g.drawLine(0, i * cellSize, grid.getWidth() * cellSize, i * cellSize);
-        }
+    public void drawGridLines(Graphics g) {
+        new Thread(() -> {
+            g.setColor(Color.GRAY);
+            for (int i = 0; i <= gameOfLife.getGrid().getWidth(); i++) {
+                g.drawLine(i * cellSize, 0, i * cellSize, gameOfLife.getGrid().getHeight() * cellSize);
+            }
+            for (int i = 0; i <= gameOfLife.getGrid().getHeight(); i++) {
+                g.drawLine(0, i * cellSize, gameOfLife.getGrid().getWidth() * cellSize, i * cellSize);
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
     }
+
 
     public int getCellSize() {
         return cellSize;

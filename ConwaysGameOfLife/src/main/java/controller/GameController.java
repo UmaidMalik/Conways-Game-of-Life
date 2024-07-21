@@ -6,16 +6,16 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class GameController implements ActionListener {
 
 
     private GameOfLife gameOfLife;
     private Timer timer;
     private MouseHandler mouseHandler;
-    private ControlListener controlListener;
     private ControlPanel controlPanel;
     private GamePanel gamePanel;
-    private int delay = 1000;
+    private int delay = 1;
 
 
     public GameController(GameOfLife gameOfLife, GamePanel gamePanel, ControlPanel controlPanel) {
@@ -24,13 +24,16 @@ public class GameController implements ActionListener {
         this.gamePanel = gamePanel;
         mouseHandler = new MouseHandler(gameOfLife, gamePanel);
 
-        this.timer = new Timer(1000, this);
+        this.timer = new Timer(delay, this);
+        gamePanel.addMouseListener(mouseHandler);
         controlPanel.addControlListener(this);
+
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == timer) {
+        if (e.getSource() == KeyStroke.getKeyStroke("SPACE")) {
             System.out.println("Timer ticked");
             gameOfLife.nextGeneration();
             gamePanel.repaint();
@@ -53,7 +56,6 @@ public class GameController implements ActionListener {
         System.out.println("Start button clicked");
         gameOfLife.nextGeneration();
         gamePanel.repaint();
-        controlPanel.addControlListener(this);
     }
 
     public void stop() {
@@ -77,4 +79,5 @@ public class GameController implements ActionListener {
     public void random() {
         System.out.println("Random button clicked");
     }
+
 }

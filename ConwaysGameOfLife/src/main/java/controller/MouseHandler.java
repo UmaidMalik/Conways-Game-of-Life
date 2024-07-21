@@ -16,12 +16,32 @@ public class MouseHandler extends MouseAdapter {
         this.gamePanel = gamePanel;
     }
 
+
+
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseDragged(MouseEvent e) {
+        super.mouseDragged(e);
         int x = e.getX() / gamePanel.getCellSize();
         int y = e.getY() / gamePanel.getCellSize();
         toggleCell(x, y);
+        System.out.println("Mouse dragged");
     }
+
+
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        int x = e.getX() / gamePanel.getCellSize();
+        int y = e.getY() / gamePanel.getCellSize();
+        toggleCell(x, y);
+        System.out.println("Mouse pressed");
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        System.out.println("Mouse moved");
+    }
+
 
     private void toggleCell(int x, int y) {
         gameOfLife.getGrid().setCell(x, y, !gameOfLife.getGrid().getCell(x, y).isAlive());
