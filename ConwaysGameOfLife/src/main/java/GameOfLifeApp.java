@@ -23,7 +23,7 @@ public class GameOfLifeApp implements Runnable {
         frame.setSize(800, 600);
         //frame.pack();
 
-        Grid grid = new Grid(80, 60);
+        Grid grid = new Grid(256, 144);
         grid.setCell(2, 4, true);
         grid.setCell(4, 1, true);
         grid.setCell(5, 2, true);

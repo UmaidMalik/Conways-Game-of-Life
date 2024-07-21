@@ -15,7 +15,7 @@ public class GameController implements ActionListener {
     private MouseHandler mouseHandler;
     private ControlPanel controlPanel;
     private GamePanel gamePanel;
-    private int delay = 1;
+    private int delay = 50;
 
 
     public GameController(GameOfLife gameOfLife, GamePanel gamePanel, ControlPanel controlPanel) {
@@ -25,15 +25,16 @@ public class GameController implements ActionListener {
         mouseHandler = new MouseHandler(gameOfLife, gamePanel);
 
         this.timer = new Timer(delay, this);
-        gamePanel.addMouseListener(mouseHandler);
-        controlPanel.addControlListener(this);
 
+        gamePanel.addMouseListener(mouseHandler);
+        gamePanel.addMouseMotionListener(mouseHandler);
+        controlPanel.addControlListener(this);
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == KeyStroke.getKeyStroke("SPACE")) {
+        if (e.getSource() == timer) {
             System.out.println("Timer ticked");
             gameOfLife.nextGeneration();
             gamePanel.repaint();
@@ -54,12 +55,12 @@ public class GameController implements ActionListener {
 
     public void start() {
         System.out.println("Start button clicked");
-        gameOfLife.nextGeneration();
-        gamePanel.repaint();
+        timer.start();
     }
 
     public void stop() {
         System.out.println("Stop button clicked");
+        timer.stop();
     }
 
     public void save() {

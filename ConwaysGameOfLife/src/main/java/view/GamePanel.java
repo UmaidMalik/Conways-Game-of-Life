@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
                 } else {
                     g.setColor(Color.BLACK);
                 }
-                g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                g.fillRect(i*cellSize, j*cellSize, cellSize, cellSize);
             }
         }
         //drawGridLines(g);
@@ -40,7 +40,6 @@ public class GamePanel extends JPanel {
 
 
     public void drawGridLines(Graphics g) {
-        new Thread(() -> {
             g.setColor(Color.GRAY);
             for (int i = 0; i <= gameOfLife.getGrid().getWidth(); i++) {
                 g.drawLine(i * cellSize, 0, i * cellSize, gameOfLife.getGrid().getHeight() * cellSize);
@@ -48,13 +47,6 @@ public class GamePanel extends JPanel {
             for (int i = 0; i <= gameOfLife.getGrid().getHeight(); i++) {
                 g.drawLine(0, i * cellSize, gameOfLife.getGrid().getWidth() * cellSize, i * cellSize);
             }
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
-
     }
 
 
