@@ -1,5 +1,8 @@
+package view;
+
+import model.*;
+import controller.*;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ControlPanel extends JPanel {
@@ -18,7 +21,7 @@ public class ControlPanel extends JPanel {
     private static final String RANDOM = "Random";
 
 
-    public ControlPanel(/*Timer timer, GameOfLife gameOfLife*/) {
+    public ControlPanel() {
         startButton = new JButton(START);
         stopButton = new JButton(STOP);
         saveButton = new JButton(SAVE);

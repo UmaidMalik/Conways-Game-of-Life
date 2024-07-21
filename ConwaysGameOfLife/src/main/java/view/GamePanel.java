@@ -1,3 +1,9 @@
+package view;
+
+import model.*;
+import controller.*;
+
+
 import javax.swing.JPanel;
 import java.awt.*;
 
@@ -12,7 +18,7 @@ public class GamePanel extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (int i = 0; i < grid.getWidth(); i++) {
             for (int j = 0; j < grid.getHeight(); j++) {

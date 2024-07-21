@@ -1,3 +1,8 @@
+package controller;
+
+import model.GameOfLife;
+import view.GamePanel;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

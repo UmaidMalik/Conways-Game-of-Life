@@ -1,3 +1,8 @@
+package controller;
+
+import model.GameOfLife;
+import view.ControlPanel;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

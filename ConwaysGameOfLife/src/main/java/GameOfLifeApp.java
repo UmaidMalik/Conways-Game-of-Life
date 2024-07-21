@@ -1,3 +1,7 @@
+import controller.*;
+import model.*;
+import view.*;
+
 import javax.swing.*;
 import java.awt.*;
 

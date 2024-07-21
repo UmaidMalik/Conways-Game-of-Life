@@ -1,3 +1,5 @@
+package model;
+
 public class GameOfLife {
     //TODO: Add observer for getting the generation count
     private Grid grid;
