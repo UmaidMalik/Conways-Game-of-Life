@@ -21,14 +21,16 @@ public class ControlPanel extends JPanel {
     private static final String RANDOM = "Random";
 
 
+
     public ControlPanel() {
+        // create GUI components
         startButton = new JButton(START);
         stopButton = new JButton(STOP);
         saveButton = new JButton(SAVE);
         loadButton = new JButton(LOAD);
         clearButton = new JButton(CLEAR);
         randomButton = new JButton(RANDOM);
-
+        // add components to container
         add(startButton);
         add(stopButton);
         add(saveButton);
@@ -44,6 +46,5 @@ public class ControlPanel extends JPanel {
         loadButton.addActionListener(listener);
         clearButton.addActionListener(listener);
         randomButton.addActionListener(listener);
-
     }
 }

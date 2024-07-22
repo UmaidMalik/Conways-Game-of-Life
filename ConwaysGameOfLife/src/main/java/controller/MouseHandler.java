@@ -32,11 +32,6 @@ public class MouseHandler extends MouseAdapter {
         toggleCell(e);
         System.out.println("Mouse dragged" + e.getX() + " " + e.getY());
         points.add(new Point(e.getX(), e.getY()));
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        isDragging = false;
         for (Point p : points) {
             int x = p.getX() / gamePanel.getCellSize();
             int y = p.getY() / gamePanel.getCellSize();
@@ -45,6 +40,12 @@ public class MouseHandler extends MouseAdapter {
                 gamePanel.repaint();
             }
         }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        isDragging = false;
+
         points.clear();
         System.out.println("Mouse released");
     }
