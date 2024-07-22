@@ -15,7 +15,7 @@ public class GameController implements ActionListener {
     private MouseHandler mouseHandler;
     private ControlPanel controlPanel;
     private GamePanel gamePanel;
-    private int delay = 10;
+    private int delay = 25;
     private Thread gameThread;
     private boolean running = true;
 

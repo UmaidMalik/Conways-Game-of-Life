@@ -16,87 +16,43 @@ public class MouseHandler extends MouseAdapter {
     private boolean isDragging = false;
     private GameOfLife gameOfLife;
     private GamePanel gamePanel;
-    private List<Point> points;
+    private boolean currentCellState;
+    private final Point p;
 
     public MouseHandler(GameOfLife gameOfLife, GamePanel gamePanel) {
         this.gameOfLife = gameOfLife;
         this.gamePanel = gamePanel;
-        points = new ArrayList<>();
+        p = new Point();
     }
-
-
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (!isDragging) return;
         toggleCell(e);
-        System.out.println("Mouse dragged" + e.getX() + " " + e.getY());
-        points.add(new Point(e.getX(), e.getY()));
-        for (Point p : points) {
-            int x = p.getX() / gamePanel.getCellSize();
-            int y = p.getY() / gamePanel.getCellSize();
-            if (x >= 0 && x < gameOfLife.getGrid().getWidth() && y >= 0 && y < gameOfLife.getGrid().getHeight()) {
-                gameOfLife.getGrid().getCell(x, y).setAlive(true);
-                gamePanel.repaint();
-            }
-        }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        isDragging = false;
-
-        points.clear();
-        System.out.println("Mouse released");
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        isDragging = true;
+        if (e.getButton() != LMB) return;
+        currentCellState = gameOfLife.getGrid().getCell(p.x, p.y).isAlive();
         toggleCell(e);
-        System.out.println("Mouse pressed");
     }
-
-
 
     private void toggleCell(MouseEvent e) {
-        if (e.getButton() != LMB) return;
-        int x = e.getX() / gamePanel.getCellSize();
-        int y = e.getY() / gamePanel.getCellSize();
-        if (x >= 0 && x < gameOfLife.getGrid().getWidth() && y >= 0 && y < gameOfLife.getGrid().getHeight()) {
-            gameOfLife.getGrid().getCell(x, y).setAlive(!gameOfLife.getGrid().getCell(x, y).isAlive());
+        p.x = e.getX() / gamePanel.getCellSize();
+        p.y = e.getY() / gamePanel.getCellSize();
+        if (p.x >= 0 && p.x < gameOfLife.getGrid().getWidth() && p.y >= 0 && p.y < gameOfLife.getGrid().getHeight()) {
+            gameOfLife.getGrid().getCell(p.x, p.y).setAlive(!currentCellState);
             gamePanel.repaint();
         }
-        System.out.println("X: " + x + " Y: " + y);
     }
 
-    private class Point {
-        private int x;
-        private int y;
-
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
+    private static class Point {
+        int x, y;
+        public Point() {
         }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public void setX(int x) {
-            this.x = x;
-        }
-
-        public void setY(int y) {
-            this.y = y;
-        }
-
-
     }
+
+
 
 }
 
