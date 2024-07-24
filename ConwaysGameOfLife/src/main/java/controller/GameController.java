@@ -2,22 +2,27 @@ package controller;
 
 import model.*;
 import view.*;
-import javax.swing.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static view.ControlPanel.*;
 
 
 public class GameController implements ActionListener {
 
 
     private GameOfLife gameOfLife;
-    private Timer timer;
+    //private Timer timer;
     private MouseHandler mouseHandler;
     private ControlPanel controlPanel;
     private int delay_ms = 25;
     private int delay_ns = 0;
+    private long elapsed_time_ms = 0;
+    private long elapsed_time_ns = 0;
     private Thread gameThread;
     private boolean running = true;
+    // TODO: may need to add synchronize block to prevent a race condition when reducing the delay
 
 
     public GameController(GameOfLife gameOfLife, GamePanel gamePanel, ControlPanel controlPanel) {
@@ -25,7 +30,7 @@ public class GameController implements ActionListener {
         this.controlPanel = controlPanel;
 
         mouseHandler = new MouseHandler(gameOfLife, gamePanel);
-        this.timer = new Timer(delay_ms, this);
+        //this.timer = new Timer(delay_ms, this);
         mouseHandler.addMouseListener();
         mouseHandler.addMouseMotionListener();
         controlPanel.addControlListener(this);
@@ -35,7 +40,6 @@ public class GameController implements ActionListener {
     private void createGameThread() {
         gameThread = new Thread(() -> {
             while (true) {
-                System.out.println("Timer ticked");
                 gameOfLife.nextGeneration();
                 mouseHandler.getGamePanel().repaint();
                 try {
@@ -49,22 +53,35 @@ public class GameController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == timer) {
-            System.out.println("Timer ticked");
-        } else if (e.getSource() == controlPanel.startButton) {
-            start();
-        } else if (e.getSource() == controlPanel.stopButton) {
-            stop();
-        } else if (e.getSource() == controlPanel.saveButton) {
-            save();
-        } else if (e.getSource() == controlPanel.loadButton) {
-            load();
-        } else if (e.getSource() == controlPanel.clearButton) {
-            clear();
-        } else if (e.getSource() == controlPanel.stepOverButton) {
-            random();
-        }
-
+        switch (e.getActionCommand()) {
+            case START:
+                start();
+                break;
+            case STOP:
+                stop();
+                break;
+            case SAVE:
+                save();
+                break;
+            case LOAD:
+                load();
+                break;
+            case CLEAR:
+                clear();
+                break;
+            case STEP_OVER:
+                stepOver();
+                break;
+            case GRID_LINES:
+                gridLines();
+                break;
+            case SPEED_UP:
+                speedUp();
+                break;
+            case SPEED_DOWN:
+                slowDown();
+                break;
+            }
     }
 
     public void start() {
@@ -79,7 +96,6 @@ public class GameController implements ActionListener {
 
     public void stop() {
         System.out.println("Stop button clicked");
-        timer.stop();
         gameThread.interrupt();
     }
 
@@ -104,13 +120,77 @@ public class GameController implements ActionListener {
         gameOfLife.getGrid().initializeGrid();
         mouseHandler.getGamePanel().repaint();
     }
-
-    public void random() {
+    public void stepOver() {
         System.out.println("Random button clicked");
         gameThread.interrupt();
-            gameOfLife.nextGeneration();
-            mouseHandler.getGamePanel().repaint();
+        gameOfLife.nextGeneration();
+        mouseHandler.getGamePanel().repaint();
+    }
 
+    public void gridLines() {
+        System.out.println("Grid Lines button clicked");
+        mouseHandler.getGamePanel().setDisplayGridLines(!mouseHandler.getGamePanel().getDisplayGridLines());
+        mouseHandler.getGamePanel().repaint();
+    }
+
+    public int getTimeDelayMilli() {
+        return delay_ms;
+    }
+
+    public int getTimeDelayNano() {
+        return delay_ns;
+    }
+
+    public void setTimeDelayMilli(int delay) {
+        delay_ms = delay;
+    }
+
+    public void setTimeDelayNano(int delay) {
+        delay_ns = delay;
+    }
+
+    public void slowDown() {
+        if (delay_ms >= 1000) {
+            delay_ms += 1000;
+        } else if (delay_ms >= 100) {
+            delay_ms += 100;
+        } else if (delay_ms >= 50) {
+            delay_ms += 10;
+        } else {
+            delay_ms += 5;
+        }
+        System.out.println("Delay ms: " + delay_ms);
+    }
+
+    public void speedUp() {
+        int n;
+        delay_ms -= delay_ms/10 + 1;
+        /*
+        if (delay_ms >= 2000) {
+            delay_ms -= 1000;
+        } else if (delay_ms >= 200) {
+            delay_ms -= 100;
+        } else if (delay_ms >= 100) {
+            delay_ms -= 25;
+        } else if (delay_ms >= 50) {
+            delay_ms -= 10;
+        } else if (delay_ns >= 15) {
+            delay_ms -= 5;
+        } else {
+            delay_ms -= 1;
+        }
+        if (delay_ms <= 0) {
+            delay_ms = 0;
+
+        }
+
+         */
+        System.out.println("Delay ms: " + delay_ms);
+    }
+
+    private void updateElapsedTime() {
+        elapsed_time_ms += System.currentTimeMillis();
+        elapsed_time_ns = System.nanoTime();
     }
 
 }

@@ -32,6 +32,7 @@ public class MouseHandler extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        applyOverlay();
         previousPoint = new Point(e.getX() / gamePanel.getCellSize(), e.getY() / gamePanel.getCellSize());
         drawMode = !gameOfLife.getGrid().getCell(previousPoint.getX(), previousPoint.getY()).isAlive();
         newPoints.clear();
@@ -50,8 +51,8 @@ public class MouseHandler extends MouseAdapter {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        applyOverlay();
         previousPoint = null;
+        applyOverlay(); // (if set to false, we use this as a draw hold)
     }
 
     private void updateCellState(Point p) {
@@ -73,7 +74,7 @@ public class MouseHandler extends MouseAdapter {
         gamePanel.repaint();
     }
 
-    public JPanel getGamePanel() {
+    public GamePanel getGamePanel() {
         return gamePanel;
     }
 

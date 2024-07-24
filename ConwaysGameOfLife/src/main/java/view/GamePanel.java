@@ -17,11 +17,13 @@ public class GamePanel extends JPanel {
     private Grid grid;
     private Set<Point> overlay;
     private boolean drawMode;
+    private boolean displayGridLines;
 
     public GamePanel(GameOfLife gameOfLife) {
         this.gameOfLife = gameOfLife;
         this.grid = gameOfLife.getGrid();
         setCellSize(10);
+        displayGridLines = false;
     }
 
     public void setOverlay(Set<Point> overlay, boolean drawMode) {
@@ -44,18 +46,23 @@ public class GamePanel extends JPanel {
             }
         }
         drawOverlay(g);
-        //drawGridLines(g);
+        if (displayGridLines) {
+            drawGridLines(g);
+        }
     }
 
     public void drawOverlay(Graphics g) {
         if (overlay != null) {
             for (Point p : overlay) {
-                g.setColor(Color.GRAY);
-                g.drawRect(p.getX() * cellSize, p.getY() * cellSize, cellSize, cellSize);
+                g.setColor(Color.CYAN);
+                if (!displayGridLines) {
+                    g.drawRect(p.getX() * cellSize, p.getY() * cellSize, cellSize, cellSize);
+                } else {
+                    g.fill3DRect(p.getX() * cellSize, p.getY() * cellSize, cellSize, cellSize, false);
+                }
             }
         }
     }
-
 
     public void drawGridLines(Graphics g) {
             g.setColor(Color.GRAY);
@@ -76,4 +83,11 @@ public class GamePanel extends JPanel {
         cellSize = size;
     }
 
+    public void setDisplayGridLines(boolean displayGridLines) {
+        this.displayGridLines = displayGridLines;
+    }
+
+    public boolean getDisplayGridLines() {
+        return displayGridLines;
+    }
 }

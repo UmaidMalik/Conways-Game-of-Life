@@ -4,27 +4,28 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 
 public class ControlPanel extends JPanel {
-    public JButton startButton;
-    public JButton stopButton;
-    public JButton saveButton;
-    public JButton loadButton;
-    public JButton clearButton;
-    public JButton stepOverButton;
-    public JButton gridLinesButton;
-    // we need speed up, speed down, show the generation count, and show the current speed
+    private JButton startButton;
+    private JButton stopButton;
+    private JButton saveButton;
+    private JButton loadButton;
+    private JButton clearButton;
+    private JButton stepOverButton;
+    private JButton gridLinesButton;
+    private JButton speedUpButton;
+    private JButton speedDownButton;
+    // we need to add speed up, speed down, show the generation count, and show the current speed
     // display x and y coordinates of the mouse pointer
     // toggle grid lines
 
-
-    private static final String START = "Start";
-    private static final String STOP = "Stop";
-    private static final String SAVE = "Save";
-    private static final String LOAD = "Load";
-    private static final String CLEAR = "Clear";
-    private static final String STEP_OVER = "Step Over";
-    private static final String GRID_LINES = "Grid Lines";
-
-
+    public static final String START = "Start";
+    public static final String STOP = "Stop";
+    public static final String SAVE = "Save";
+    public static final String LOAD = "Load";
+    public static final String CLEAR = "Clear";
+    public static final String STEP_OVER = "Step Over";
+    public static final String GRID_LINES = "Grid Lines";
+    public static final String SPEED_UP = "Speed Up";
+    public static final String SPEED_DOWN = "Speed Down";
 
     public ControlPanel() {
         // create GUI components
@@ -35,7 +36,8 @@ public class ControlPanel extends JPanel {
         clearButton = new JButton(CLEAR);
         stepOverButton = new JButton(STEP_OVER);
         gridLinesButton = new JButton(GRID_LINES);
-
+        speedUpButton = new JButton(SPEED_UP);
+        speedDownButton = new JButton(SPEED_DOWN);
 
         // add components to container
         add(startButton);
@@ -45,6 +47,8 @@ public class ControlPanel extends JPanel {
         add(clearButton);
         add(stepOverButton);
         add(gridLinesButton);
+        add(speedUpButton);
+        add(speedDownButton);
     }
 
     public void addControlListener(ActionListener listener) {
@@ -55,5 +59,7 @@ public class ControlPanel extends JPanel {
         clearButton.addActionListener(listener);
         stepOverButton.addActionListener(listener);
         gridLinesButton.addActionListener(listener);
+        speedUpButton.addActionListener(listener);
+        speedDownButton.addActionListener(listener);
     }
 }
