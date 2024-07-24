@@ -2,10 +2,12 @@ package view;
 
 import model.*;
 import controller.*;
+import model.Point;
 
 
 import javax.swing.JPanel;
 import java.awt.*;
+import java.util.Set;
 
 public class GamePanel extends JPanel {
 
@@ -13,17 +15,23 @@ public class GamePanel extends JPanel {
     private int cellSize;
     private int width, height;
     private Grid grid;
+    private Set<Point> overlay;
+    private boolean drawMode;
 
     public GamePanel(GameOfLife gameOfLife) {
         this.gameOfLife = gameOfLife;
         this.grid = gameOfLife.getGrid();
-        //this.width = grid.getWidth();
-        //this.height = grid.getHeight();
         setCellSize(10);
+    }
+
+    public void setOverlay(Set<Point> overlay, boolean drawMode) {
+        this.overlay = overlay;
+        this.drawMode = drawMode;
     }
 
     @Override
     public void paintComponent(Graphics g) {
+        //super.paintComponent(g);
 
         for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
             for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
@@ -35,7 +43,17 @@ public class GamePanel extends JPanel {
                 g.fillRect(i*cellSize, j*cellSize, cellSize, cellSize);
             }
         }
+        drawOverlay(g);
         //drawGridLines(g);
+    }
+
+    public void drawOverlay(Graphics g) {
+        if (overlay != null) {
+            for (Point p : overlay) {
+                g.setColor(Color.GRAY);
+                g.drawRect(p.getX() * cellSize, p.getY() * cellSize, cellSize, cellSize);
+            }
+        }
     }
 
 

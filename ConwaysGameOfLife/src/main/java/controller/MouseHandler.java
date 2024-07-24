@@ -1,14 +1,14 @@
 package controller;
 
 import model.GameOfLife;
+import model.Point;
 import view.GamePanel;
 
-import java.awt.event.KeyEvent;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MouseHandler extends MouseAdapter {
 
@@ -16,43 +16,74 @@ public class MouseHandler extends MouseAdapter {
     private boolean isDragging = false;
     private GameOfLife gameOfLife;
     private GamePanel gamePanel;
-    private boolean currentCellState;
+    private boolean drawMode;
+    private Point previousPoint;
     private final Point p;
+    private Set<Point> newPoints;
 
     public MouseHandler(GameOfLife gameOfLife, GamePanel gamePanel) {
         this.gameOfLife = gameOfLife;
         this.gamePanel = gamePanel;
         p = new Point();
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        toggleCell(e);
+        drawMode = true;
+        previousPoint = null;
+        newPoints = new HashSet<>();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() != LMB) return;
-        currentCellState = gameOfLife.getGrid().getCell(p.x, p.y).isAlive();
-        toggleCell(e);
+        previousPoint = new Point(e.getX() / gamePanel.getCellSize(), e.getY() / gamePanel.getCellSize());
+        drawMode = !gameOfLife.getGrid().getCell(previousPoint.getX(), previousPoint.getY()).isAlive();
+        newPoints.clear();
+        updateCellState(previousPoint);
     }
 
-    private void toggleCell(MouseEvent e) {
-        p.x = e.getX() / gamePanel.getCellSize();
-        p.y = e.getY() / gamePanel.getCellSize();
-        if (p.x >= 0 && p.x < gameOfLife.getGrid().getWidth() && p.y >= 0 && p.y < gameOfLife.getGrid().getHeight()) {
-            gameOfLife.getGrid().getCell(p.x, p.y).setAlive(!currentCellState);
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        Point currentPoint = new Point(e.getX() / gamePanel.getCellSize(), e.getY() / gamePanel.getCellSize());
+        //newPoints.add(currentPoint);
+        if (!currentPoint.equals(previousPoint)) {
+            updateCellState(currentPoint);
+            previousPoint = currentPoint;
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        applyOverlay();
+        previousPoint = null;
+    }
+
+    private void updateCellState(Point p) {
+        int x = p.getX();
+        int y = p.getY();
+        if (x >= 0 && x < gameOfLife.getGrid().getWidth() && y >= 0 && y < gameOfLife.getGrid().getHeight()) {
+            //gameOfLife.getGrid().setCell(x, y, drawMode);
+            newPoints.add(p);
             gamePanel.repaint();
         }
     }
 
-    private static class Point {
-        int x, y;
-        public Point() {
+    private void applyOverlay() {
+        for (Point p : newPoints) {
+            gameOfLife.getGrid().setCell(p.getX(), p.getY(), drawMode);
         }
+        newPoints.clear();
+        gamePanel.setOverlay(newPoints, drawMode);
+        gamePanel.repaint();
     }
 
+    public JPanel getGamePanel() {
+        return gamePanel;
+    }
 
+    public void addMouseListener() {
+        gamePanel.addMouseListener(this);
+    }
+
+    public void addMouseMotionListener() {
+        gamePanel.addMouseMotionListener(this);
+    }
 
 }
 

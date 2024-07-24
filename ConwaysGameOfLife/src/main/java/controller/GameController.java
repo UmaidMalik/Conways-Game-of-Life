@@ -14,8 +14,8 @@ public class GameController implements ActionListener {
     private Timer timer;
     private MouseHandler mouseHandler;
     private ControlPanel controlPanel;
-    private GamePanel gamePanel;
-    private int delay = 25;
+    private int delay_ms = 25;
+    private int delay_ns = 0;
     private Thread gameThread;
     private boolean running = true;
 
@@ -23,13 +23,11 @@ public class GameController implements ActionListener {
     public GameController(GameOfLife gameOfLife, GamePanel gamePanel, ControlPanel controlPanel) {
         this.gameOfLife = gameOfLife;
         this.controlPanel = controlPanel;
-        this.gamePanel = gamePanel;
+
         mouseHandler = new MouseHandler(gameOfLife, gamePanel);
-
-        this.timer = new Timer(delay, this);
-
-        gamePanel.addMouseListener(mouseHandler);
-        gamePanel.addMouseMotionListener(mouseHandler);
+        this.timer = new Timer(delay_ms, this);
+        mouseHandler.addMouseListener();
+        mouseHandler.addMouseMotionListener();
         controlPanel.addControlListener(this);
         createGameThread();
     }
@@ -37,14 +35,11 @@ public class GameController implements ActionListener {
     private void createGameThread() {
         gameThread = new Thread(() -> {
             while (true) {
-
-
-
                 System.out.println("Timer ticked");
                 gameOfLife.nextGeneration();
-                gamePanel.repaint();
+                mouseHandler.getGamePanel().repaint();
                 try {
-                    Thread.sleep(delay, 0);
+                    Thread.sleep(delay_ms, delay_ns);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -52,13 +47,10 @@ public class GameController implements ActionListener {
         });
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == timer) {
             System.out.println("Timer ticked");
-            gameOfLife.nextGeneration();
-            gamePanel.repaint();
         } else if (e.getSource() == controlPanel.startButton) {
             start();
         } else if (e.getSource() == controlPanel.stopButton) {
@@ -69,7 +61,7 @@ public class GameController implements ActionListener {
             load();
         } else if (e.getSource() == controlPanel.clearButton) {
             clear();
-        } else if (e.getSource() == controlPanel.randomButton) {
+        } else if (e.getSource() == controlPanel.stepOverButton) {
             random();
         }
 
@@ -93,20 +85,32 @@ public class GameController implements ActionListener {
 
     public void save() {
         System.out.println("Save button clicked");
+        Grid saveGrid = gameOfLife.getGrid();
+        gameThread.interrupt();
+        for (int i = 0; i < saveGrid.getWidth(); i++) {
+            for (int j = 0; j < saveGrid.getHeight(); j++) {
+                System.out.print(saveGrid.getCell(i, j).isAlive() ? "1" : "0");
+            }
+            System.out.println();
+        }
     }
 
     public void load() {
-        System.out.println("Load button clicked");
+        System.out.println("model.Load button clicked");
     }
 
     public void clear() {
         System.out.println("Clear button clicked");
         gameOfLife.getGrid().initializeGrid();
-        gamePanel.repaint();
+        mouseHandler.getGamePanel().repaint();
     }
 
     public void random() {
         System.out.println("Random button clicked");
+        gameThread.interrupt();
+            gameOfLife.nextGeneration();
+            mouseHandler.getGamePanel().repaint();
+
     }
 
 }

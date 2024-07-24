@@ -1,22 +1,28 @@
 package model;
 
-public class GameOfLife {
+import javax.swing.*;
+import java.awt.*;
+
+public class GameOfLife extends JPanel {
     //TODO: Add observer for getting the generation count
     private Grid grid;
     private int generation;
-    private static GameOfLife gameOfLife;
+    //private static GameOfLife gameOfLife;
     private Grid nextGenerationGrid;
 
-    private GameOfLife() {
+    public GameOfLife() {
         generation = 0;
     }
 
+    /*
     public static GameOfLife getInstance() {
         if (gameOfLife == null) {
             gameOfLife = new GameOfLife();
         }
         return gameOfLife;
     }
+
+     */
 
     public void nextGeneration() {
         update();
@@ -50,7 +56,7 @@ public class GameOfLife {
 
     private void applyGameOfLifeRule(int i, int j, int aliveNeighbours) {
         if (grid.getCell(i,j).isAlive()) {
-            if (aliveNeighbours < 2 || aliveNeighbours > 3) {
+            if (aliveNeighbours != 3 && aliveNeighbours != 2) {
                 nextGenerationGrid.setCell(i, j, false);
             }
         } else {

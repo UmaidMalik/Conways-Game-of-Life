@@ -62,16 +62,19 @@ public class GameOfLifeApp implements Runnable {
         grid.setCell(54, 25, true);
         grid.setCell(53, 25, true);
         grid.setCell(52, 24, true);
-        GameOfLife gameOfLife = GameOfLife.getInstance();
+        //GameOfLife gameOfLife = GameOfLife.getInstance();
+        GameOfLife gameOfLife = new GameOfLife();
         ControlPanel controlPanel = new ControlPanel();
         gameOfLife.setGrid(grid);
         GamePanel gamePanel = new GamePanel(gameOfLife);
-        GameController gameController = new GameController(gameOfLife, gamePanel, controlPanel);
+        new GameController(gameOfLife, gamePanel, controlPanel);
         // Set layout and add panels
 
         frame.setLayout(new BorderLayout());
         frame.add(gamePanel, BorderLayout.CENTER);
         frame.add(controlPanel, BorderLayout.SOUTH);
+
+
 
         // Make the frame visible
         frame.setVisible(true);
