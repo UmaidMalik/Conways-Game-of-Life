@@ -5,6 +5,7 @@ import model.Point;
 import view.GamePanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
@@ -12,19 +13,15 @@ import java.util.Set;
 
 public class MouseHandler extends MouseAdapter {
 
-    private static final int LMB = MouseEvent.BUTTON1; // left mouse button
-    private boolean isDragging = false;
     private GameOfLife gameOfLife;
     private GamePanel gamePanel;
     private boolean drawMode;
     private Point previousPoint;
-    private final Point p;
     private Set<Point> newPoints;
 
     public MouseHandler(GameOfLife gameOfLife, GamePanel gamePanel) {
         this.gameOfLife = gameOfLife;
         this.gamePanel = gamePanel;
-        p = new Point();
         drawMode = true;
         previousPoint = null;
         newPoints = new HashSet<>();
@@ -42,7 +39,7 @@ public class MouseHandler extends MouseAdapter {
     @Override
     public void mouseDragged(MouseEvent e) {
         Point currentPoint = new Point(e.getX() / gamePanel.getCellSize(), e.getY() / gamePanel.getCellSize());
-        //newPoints.add(currentPoint);
+        newPoints.add(currentPoint);
         if (!currentPoint.equals(previousPoint)) {
             updateCellState(currentPoint);
             previousPoint = currentPoint;
@@ -67,7 +64,7 @@ public class MouseHandler extends MouseAdapter {
 
     private void applyOverlay() {
         for (Point p : newPoints) {
-            gameOfLife.getGrid().setCell(p.getX(), p.getY(), drawMode);
+            gameOfLife.getGrid().setCell(p.getX(), p.getY(), drawMode, Color.BLUE);
         }
         newPoints.clear();
         gamePanel.setOverlay(newPoints, drawMode);

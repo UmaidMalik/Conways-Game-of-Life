@@ -31,7 +31,7 @@ public class GameOfLifeApp implements Runnable {
         grid.setCell(5, 5, true);
         grid.setCell(4, 5, true);
         grid.setCell(3, 5, true);
-        grid.setCell(2, 4, true);
+
 
         grid.setCell(2, 24, true);
         grid.setCell(4, 21, true);
@@ -41,7 +41,7 @@ public class GameOfLifeApp implements Runnable {
         grid.setCell(5, 25, true);
         grid.setCell(4, 25, true);
         grid.setCell(3, 25, true);
-        grid.setCell(2, 24, true);
+
 
         grid.setCell(32, 4, true);
         grid.setCell(34, 1, true);
@@ -51,7 +51,7 @@ public class GameOfLifeApp implements Runnable {
         grid.setCell(35, 5, true);
         grid.setCell(34, 5, true);
         grid.setCell(33, 5, true);
-        grid.setCell(32, 4, true);
+
 
         grid.setCell(52, 24, true);
         grid.setCell(54, 21, true);
@@ -61,7 +61,67 @@ public class GameOfLifeApp implements Runnable {
         grid.setCell(55, 25, true);
         grid.setCell(54, 25, true);
         grid.setCell(53, 25, true);
-        grid.setCell(52, 24, true);
+
+        int x_offset = 100;
+        int y_offset = 100;
+        // oscillator
+        // top left
+        grid.setCell(0 + x_offset, 2 + y_offset, true);
+        grid.setCell(0 + x_offset, 3 + y_offset, true);
+        grid.setCell(0 + x_offset, 4 + y_offset, true);
+        grid.setCell(2 + x_offset, 0 + y_offset, true);
+        grid.setCell(3 + x_offset, 0 + y_offset, true);
+        grid.setCell(4 + x_offset, 0 + y_offset, true);
+        grid.setCell(5 + x_offset, 2 + y_offset, true);
+        grid.setCell(5 + x_offset, 3 + y_offset, true);
+        grid.setCell(5 + x_offset, 4 + y_offset, true);
+        grid.setCell(2 + x_offset, 5 + y_offset, true);
+        grid.setCell(3 + x_offset, 5 + y_offset, true);
+        grid.setCell(4 + x_offset, 5 + y_offset, true);
+
+        grid.setCell(2 + x_offset, 7 + y_offset, true);
+        grid.setCell(3 + x_offset, 7 + y_offset, true);
+        grid.setCell(4 + x_offset, 7 + y_offset, true);
+        grid.setCell(x_offset, 8 + y_offset, true);
+        grid.setCell(x_offset, 9 + y_offset, true);
+        grid.setCell(x_offset, 10 + y_offset, true);
+        grid.setCell(5 + x_offset, 8 + y_offset, true);
+        grid.setCell(5 + x_offset, 9 + y_offset, true);
+        grid.setCell(5 + x_offset, 10 + y_offset, true);
+        grid.setCell(2 + x_offset, 12 + y_offset, true);
+        grid.setCell(3 + x_offset,12  + y_offset, true);
+        grid.setCell(4 + x_offset,12  + y_offset, true);
+
+        grid.setCell(7 + x_offset, 2 + y_offset, true);
+        grid.setCell(7 + x_offset, 3 + y_offset, true);
+        grid.setCell(7 + x_offset, 4 + y_offset, true);
+        grid.setCell(8 + x_offset, 0 + y_offset, true);
+        grid.setCell(9 + x_offset, 0 + y_offset, true);
+        grid.setCell(10 + x_offset,0 + y_offset, true);
+        grid.setCell(8 + x_offset, 5 + y_offset, true);
+        grid.setCell(9 + x_offset, 5 + y_offset, true);
+        grid.setCell(10 + x_offset,5 + y_offset, true);
+        grid.setCell(12 + x_offset,2 + y_offset, true);
+        grid.setCell(12 + x_offset,3 + y_offset, true);
+        grid.setCell(12 + x_offset,4  + y_offset, true);
+
+        grid.setCell(7 + x_offset,8 + y_offset, true);
+        grid.setCell(7 + x_offset,9 + y_offset, true);
+        grid.setCell(7 + x_offset,10 + y_offset, true);
+        grid.setCell(8 + x_offset,7 + y_offset, true);
+        grid.setCell(9 + x_offset,7 + y_offset, true);
+        grid.setCell(10 + x_offset,7 + y_offset, true);
+        grid.setCell(8 + x_offset,12 + y_offset, true);
+        grid.setCell(9 + x_offset,12 + y_offset, true);
+        grid.setCell(10 + x_offset,12 + y_offset, true);
+        grid.setCell(12 + x_offset,8 + y_offset, true);
+        grid.setCell(12 + x_offset,9 + y_offset, true);
+        grid.setCell(12 + x_offset,10 + y_offset, true);
+
+
+
+
+
         //GameOfLife gameOfLife = GameOfLife.getInstance();
         GameOfLife gameOfLife = new GameOfLife();
         ControlPanel controlPanel = new ControlPanel();

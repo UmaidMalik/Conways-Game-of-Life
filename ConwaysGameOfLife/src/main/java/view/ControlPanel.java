@@ -16,6 +16,7 @@ public class ControlPanel extends JPanel {
     // we need to add speed up, speed down, show the generation count, and show the current speed
     // display x and y coordinates of the mouse pointer
     // toggle grid lines
+    // modifiable rules
 
     public static final String START = "Start";
     public static final String STOP = "Stop";

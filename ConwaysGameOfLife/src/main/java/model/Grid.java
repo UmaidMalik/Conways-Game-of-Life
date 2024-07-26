@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.*;
+
 public class Grid {
 
     private Cell[][] cells;
@@ -28,8 +30,14 @@ public class Grid {
         cells[x][y].setAlive(isAlive);
     }
 
-    public void setNewCell(int x, int y, Cell cell) {
+    public void setCell(int x, int y, boolean isAlive, Color color) {
+        cells[x][y].setAlive(isAlive);
+        cells[x][y].setColor(color);
+    }
+
+    public void setNewCell(int x, int y, Cell cell, Color color) {
         cells[x][y] = cell;
+        cells[x][y].setColor(color);
     }
 
     public void printGrid() {

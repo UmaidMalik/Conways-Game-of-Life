@@ -1,7 +1,6 @@
 package view;
 
 import model.*;
-import controller.*;
 import model.Point;
 
 
@@ -18,6 +17,22 @@ public class GamePanel extends JPanel {
     private Set<Point> overlay;
     private boolean drawMode;
     private boolean displayGridLines;
+
+
+    private int index = 0;
+    private Color[] colorsFiery = {Color.RED, Color.YELLOW, Color.ORANGE};
+    private Color[] colorsCool = {Color.BLUE, Color.CYAN, Color.WHITE};
+    private Color[] colorsGrayScale = {Color.WHITE, Color.GRAY, Color.LIGHT_GRAY, Color.DARK_GRAY};
+    private Color[] colorsRainbow = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.MAGENTA};
+    private Color[] colorsCanadian = {Color.WHITE, Color.RED};
+    private Color[] colorsAmerican = {Color.RED, Color.WHITE, Color.BLUE};
+    private Color[] colorsIronMan = {Color.RED, Color.ORANGE};
+    private Color[] colorsHue = {Color.RED,  Color.GREEN, Color.BLUE };
+
+    private int getColor(int n) {
+        return index++ % n;
+    }
+
 
     public GamePanel(GameOfLife gameOfLife) {
         this.gameOfLife = gameOfLife;
@@ -38,7 +53,17 @@ public class GamePanel extends JPanel {
         for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
             for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
                 if (gameOfLife.getGrid().getCell(i, j).isAlive()) {
-                    g.setColor(Color.WHITE);
+                    //g.setColor(Color.WHITE);
+                    g.setColor(gameOfLife.getGrid().getCell(i, j).getColor());
+
+                    //g.setColor(colorsFiery[getColor(colorsFiery.length)]);
+                    //g.setColor(colorsGrayScale[getColor(colorsGrayScale.length)]);
+                    //g.setColor(colorsCool[getColor(colorsCool.length)]);
+                    //g.setColor(colorsRainbow[getColor(colorsRainbow.length)]);
+                    //g.setColor(colorsCanadian[getColor(colorsCanadian.length)]);
+                    //g.setColor(colorsAmerican[getColor(colorsAmerican.length)]);
+                    //g.setColor(colorsIronMan[getColor(colorsIronMan.length)]);
+                    //g.setColor(colorsHue[getColor(colorsHue.length)]);
                 } else {
                     g.setColor(Color.BLACK);
                 }

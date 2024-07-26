@@ -22,6 +22,7 @@ public class GameController implements ActionListener {
     private long elapsed_time_ns = 0;
     private Thread gameThread;
     private boolean running = true;
+    private static final Object lock = new Object();
     // TODO: may need to add synchronize block to prevent a race condition when reducing the delay
 
 
@@ -35,19 +36,29 @@ public class GameController implements ActionListener {
         mouseHandler.addMouseMotionListener();
         controlPanel.addControlListener(this);
         createGameThread();
+
+
+
     }
 
     private void createGameThread() {
         gameThread = new Thread(() -> {
-            while (true) {
-                gameOfLife.nextGeneration();
-                mouseHandler.getGamePanel().repaint();
-                try {
-                    Thread.sleep(delay_ms, delay_ns);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+            synchronized (lock) {
+                while (true) {
+                    try {
+                        while (!running) { lock.wait(); }
+
+                        gameOfLife.nextGeneration();
+                        mouseHandler.getGamePanel().repaint();
+                        Thread.sleep(delay_ms, delay_ns);
+                    } catch (InterruptedException e) {
+                        System.out.println("Simulation paused");
+                    }
                 }
             }
+
+
+
         });
     }
 
@@ -87,16 +98,30 @@ public class GameController implements ActionListener {
     public void start() {
         System.out.println("Start button clicked");
         //timer.start();
+        /*
         if (!gameThread.isAlive()) {
             createGameThread();
             System.out.println("Game thread interrupted");
         }
         gameThread.start();
+
+         */
+
+        gameThread.start();
+
+        running = true;
+        synchronized (lock) {
+            lock.notify();
+        }
+
     }
 
     public void stop() {
         System.out.println("Stop button clicked");
-        gameThread.interrupt();
+        //gameThread.interrupt();
+        synchronized (lock) {
+            running = false;
+        }
     }
 
     public void save() {
@@ -122,7 +147,10 @@ public class GameController implements ActionListener {
     }
     public void stepOver() {
         System.out.println("Random button clicked");
-        gameThread.interrupt();
+        running = false;
+        synchronized (lock) {
+            lock.notify();
+        }
         gameOfLife.nextGeneration();
         mouseHandler.getGamePanel().repaint();
     }
@@ -150,41 +178,12 @@ public class GameController implements ActionListener {
     }
 
     public void slowDown() {
-        if (delay_ms >= 1000) {
-            delay_ms += 1000;
-        } else if (delay_ms >= 100) {
-            delay_ms += 100;
-        } else if (delay_ms >= 50) {
-            delay_ms += 10;
-        } else {
-            delay_ms += 5;
-        }
+        delay_ms = (int) (1.1 * delay_ms);
         System.out.println("Delay ms: " + delay_ms);
     }
 
     public void speedUp() {
-        int n;
-        delay_ms -= delay_ms/10 + 1;
-        /*
-        if (delay_ms >= 2000) {
-            delay_ms -= 1000;
-        } else if (delay_ms >= 200) {
-            delay_ms -= 100;
-        } else if (delay_ms >= 100) {
-            delay_ms -= 25;
-        } else if (delay_ms >= 50) {
-            delay_ms -= 10;
-        } else if (delay_ns >= 15) {
-            delay_ms -= 5;
-        } else {
-            delay_ms -= 1;
-        }
-        if (delay_ms <= 0) {
-            delay_ms = 0;
-
-        }
-
-         */
+        delay_ms = (int) (0.9 * delay_ms);
         System.out.println("Delay ms: " + delay_ms);
     }
 

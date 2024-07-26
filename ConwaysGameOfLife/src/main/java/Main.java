@@ -14,6 +14,12 @@ public class Main {
 
         GameOfLifeApp.launch();
         /*
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Hello, World!" + Math.random());
+        }
+
+         */
+        /*
         JFrame frame = new JFrame("Conway's Game of Life");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
