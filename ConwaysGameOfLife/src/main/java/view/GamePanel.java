@@ -37,7 +37,7 @@ public class GamePanel extends JPanel {
     public GamePanel(GameOfLife gameOfLife) {
         this.gameOfLife = gameOfLife;
         this.grid = gameOfLife.getGrid();
-        setCellSize(10);
+        setCellSize(5);
         displayGridLines = false;
     }
 

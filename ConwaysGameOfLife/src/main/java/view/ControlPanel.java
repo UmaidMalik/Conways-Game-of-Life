@@ -12,7 +12,7 @@ public class ControlPanel extends JPanel {
     private JButton stepOverButton;
     private JButton gridLinesButton;
     private JButton speedUpButton;
-    private JButton speedDownButton;
+    private JButton slowDownButton;
     // we need to add speed up, speed down, show the generation count, and show the current speed
     // display x and y coordinates of the mouse pointer
     // toggle grid lines
@@ -26,7 +26,7 @@ public class ControlPanel extends JPanel {
     public static final String STEP_OVER = "Step Over";
     public static final String GRID_LINES = "Grid Lines";
     public static final String SPEED_UP = "Speed Up";
-    public static final String SPEED_DOWN = "Speed Down";
+    public static final String SLOW_DOWN = "Slow Down";
 
     public ControlPanel() {
         // create GUI components
@@ -38,7 +38,7 @@ public class ControlPanel extends JPanel {
         stepOverButton = new JButton(STEP_OVER);
         gridLinesButton = new JButton(GRID_LINES);
         speedUpButton = new JButton(SPEED_UP);
-        speedDownButton = new JButton(SPEED_DOWN);
+        slowDownButton = new JButton(SLOW_DOWN);
 
         // add components to container
         add(startButton);
@@ -49,7 +49,7 @@ public class ControlPanel extends JPanel {
         add(stepOverButton);
         add(gridLinesButton);
         add(speedUpButton);
-        add(speedDownButton);
+        add(slowDownButton);
     }
 
     public void addControlListener(ActionListener listener) {
@@ -61,6 +61,6 @@ public class ControlPanel extends JPanel {
         stepOverButton.addActionListener(listener);
         gridLinesButton.addActionListener(listener);
         speedUpButton.addActionListener(listener);
-        speedDownButton.addActionListener(listener);
+        slowDownButton.addActionListener(listener);
     }
 }

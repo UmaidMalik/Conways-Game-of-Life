@@ -21,8 +21,8 @@ public class GameController implements ActionListener {
     private long elapsed_time_ms = 0;
     private long elapsed_time_ns = 0;
     private Thread gameThread;
-    private boolean running = true;
-    private static final Object lock = new Object();
+    private volatile boolean paused = true;
+    private final static int MICRO_SECONDS = 1000;
     // TODO: may need to add synchronize block to prevent a race condition when reducing the delay
 
 
@@ -36,29 +36,23 @@ public class GameController implements ActionListener {
         mouseHandler.addMouseMotionListener();
         controlPanel.addControlListener(this);
         createGameThread();
-
-
-
     }
 
     private void createGameThread() {
         gameThread = new Thread(() -> {
-            synchronized (lock) {
-                while (true) {
-                    try {
-                        while (!running) { lock.wait(); }
-
-                        gameOfLife.nextGeneration();
-                        mouseHandler.getGamePanel().repaint();
-                        Thread.sleep(delay_ms, delay_ns);
-                    } catch (InterruptedException e) {
-                        System.out.println("Simulation paused");
-                    }
+            while (true) {
+                if (paused) {
+                    waitHere();
+                    continue;
+                }
+                try {
+                    gameOfLife.nextGeneration();
+                    mouseHandler.getGamePanel().repaint();
+                    Thread.sleep(delay_ms, delay_ns);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
             }
-
-
-
         });
     }
 
@@ -89,7 +83,7 @@ public class GameController implements ActionListener {
             case SPEED_UP:
                 speedUp();
                 break;
-            case SPEED_DOWN:
+            case SLOW_DOWN:
                 slowDown();
                 break;
             }
@@ -97,47 +91,32 @@ public class GameController implements ActionListener {
 
     public void start() {
         System.out.println("Start button clicked");
-        //timer.start();
-        /*
         if (!gameThread.isAlive()) {
-            createGameThread();
-            System.out.println("Game thread interrupted");
+            gameThread.start();
         }
-        gameThread.start();
-
-         */
-
-        gameThread.start();
-
-        running = true;
-        synchronized (lock) {
-            lock.notify();
-        }
-
+        paused = false;
     }
 
     public void stop() {
         System.out.println("Stop button clicked");
-        //gameThread.interrupt();
-        synchronized (lock) {
-            running = false;
-        }
+        paused = true;
     }
 
     public void save() {
         System.out.println("Save button clicked");
         Grid saveGrid = gameOfLife.getGrid();
-        gameThread.interrupt();
+        paused = true;
         for (int i = 0; i < saveGrid.getWidth(); i++) {
             for (int j = 0; j < saveGrid.getHeight(); j++) {
                 System.out.print(saveGrid.getCell(i, j).isAlive() ? "1" : "0");
             }
             System.out.println();
         }
+        paused = false;
     }
 
     public void load() {
-        System.out.println("model.Load button clicked");
+        System.out.println("Load button clicked");
     }
 
     public void clear() {
@@ -147,10 +126,7 @@ public class GameController implements ActionListener {
     }
     public void stepOver() {
         System.out.println("Random button clicked");
-        running = false;
-        synchronized (lock) {
-            lock.notify();
-        }
+        paused = true;
         gameOfLife.nextGeneration();
         mouseHandler.getGamePanel().repaint();
     }
@@ -183,6 +159,7 @@ public class GameController implements ActionListener {
     }
 
     public void speedUp() {
+
         delay_ms = (int) (0.9 * delay_ms);
         System.out.println("Delay ms: " + delay_ms);
     }
@@ -190,6 +167,14 @@ public class GameController implements ActionListener {
     private void updateElapsedTime() {
         elapsed_time_ms += System.currentTimeMillis();
         elapsed_time_ns = System.nanoTime();
+    }
+
+    private void waitHere() {
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
 }

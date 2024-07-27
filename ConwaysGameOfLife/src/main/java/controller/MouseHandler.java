@@ -63,8 +63,12 @@ public class MouseHandler extends MouseAdapter {
     }
 
     private void applyOverlay() {
+        int width = gameOfLife.getGrid().getWidth();
+        int height = gameOfLife.getGrid().getHeight();
         for (Point p : newPoints) {
-            gameOfLife.getGrid().setCell(p.getX(), p.getY(), drawMode, Color.BLUE);
+            if ( p.getX() >= 0 && p.getX() < width && p.getY() >= 0 && p.getY() < height) {
+                gameOfLife.getGrid().setCell(p.getX(), p.getY(), drawMode, Color.BLUE);
+            }
         }
         newPoints.clear();
         gamePanel.setOverlay(newPoints, drawMode);
@@ -82,7 +86,6 @@ public class MouseHandler extends MouseAdapter {
     public void addMouseMotionListener() {
         gamePanel.addMouseMotionListener(this);
     }
-
 }
 
 
