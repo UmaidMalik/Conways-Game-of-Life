@@ -14,11 +14,13 @@ public class GameOfLife extends JPanel {
     private Grid nextGenerationGrid;
     private Set<Integer> surviveRules;
     private Set<Integer> birthRules;
+    private boolean isEdgeWrapped;
 
     public GameOfLife() {
         generation = 0;
         surviveRules = new HashSet<>();
         birthRules = new HashSet<>();
+        isEdgeWrapped = false;
     }
 
     /*
@@ -66,6 +68,19 @@ public class GameOfLife extends JPanel {
         surviveRules.add(8);
     }
 
+    public void setMyRule() {
+        birthRules.clear();
+        surviveRules.clear();
+        birthRules.add(3);
+        surviveRules.add(0);
+        surviveRules.add(1);
+        surviveRules.add(4);
+        surviveRules.add(5);
+        surviveRules.add(6);
+        surviveRules.add(7);
+        surviveRules.add(8);
+    }
+
     private void update() {
         createCopyOfGrid();
         for (int i = 0; i < grid.getWidth(); i++) {
@@ -79,13 +94,17 @@ public class GameOfLife extends JPanel {
 
     public int countAliveNeighbors(int i, int j) {
         int aliveNeighbors = 0;
-        for (int x = i - 1; x <= i + 1; x++) {
-            for (int y = j - 1; y <= j + 1; y++) {
-                if (x >= 0 && x < grid.getWidth() &&
-                        y >= 0 && y < grid.getHeight() &&
-                        !(x == i && y == j) && grid.getCell(x,y).isAlive()) {
-                    aliveNeighbors++;
-                }
+        int xCoordinate;
+       int yCoordinate;
+       for (int x = i - 1; x <= i + 1; x++) {
+           for (int y = j - 1; y <= j + 1; y++) {
+               xCoordinate = (isEdgeWrapped) ? ((x + grid.getWidth()) % grid.getWidth()) : x;
+               yCoordinate = (isEdgeWrapped) ? ((y + grid.getHeight()) % grid.getHeight()) : y;
+               if (!(xCoordinate >= 0 && xCoordinate < grid.getWidth() &&
+                       yCoordinate >= 0 && yCoordinate < grid.getHeight())) continue;
+               if (!(x == i && y == j) && grid.getCell(xCoordinate, yCoordinate).isAlive()) {
+                   aliveNeighbors++;
+               }
             }
         }
         return aliveNeighbors;
@@ -93,20 +112,21 @@ public class GameOfLife extends JPanel {
 
     private void applyGameOfLifeRule(int i, int j, int aliveNeighbours) {
         // game of life rule
-        setDefaultGameOfLifeRule();
+        //setDefaultGameOfLifeRule();
+        //setDefaultAmoebaRule();
+        setMyRule();
         boolean isAlive = grid.getCell(i,j).isAlive();
         boolean shouldSurvive = isAlive && surviveRules.contains(aliveNeighbours); // 2!
         boolean shouldBeBorn = !isAlive && birthRules.contains(aliveNeighbours);
-
         nextGenerationGrid.setCell(i, j, shouldSurvive || shouldBeBorn, grid.getCell(i,j).getColor());
-
     }
 
     private void createCopyOfGrid() {
         nextGenerationGrid = new Grid(grid.getWidth(), grid.getHeight());
         for (int i = 0; i < grid.getWidth(); i++) {
             for (int j = 0; j < grid.getHeight(); j++) {
-                nextGenerationGrid.setNewCell(i, j, new Cell(grid.getCell(i,j).isAlive()), grid.getCell(i,j).getColor());
+                nextGenerationGrid.setNewCell(i, j, new Cell(grid.getCell(i,j).isAlive()),
+                        grid.getCell(i,j).getColor());
             }
         }
     }
@@ -127,7 +147,11 @@ public class GameOfLife extends JPanel {
         return generation;
     }
 
+    public void toggleEdgeWrapping() {
+        isEdgeWrapped = !isEdgeWrapped;
+    }
 
-
-
+    public boolean isEdgeWrapped() {
+        return isEdgeWrapped;
+    }
 }

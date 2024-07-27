@@ -37,7 +37,7 @@ public class GamePanel extends JPanel {
     public GamePanel(GameOfLife gameOfLife) {
         this.gameOfLife = gameOfLife;
         this.grid = gameOfLife.getGrid();
-        setCellSize(5);
+        setCellSize(10);
         displayGridLines = false;
     }
 
@@ -98,7 +98,6 @@ public class GamePanel extends JPanel {
                 g.drawLine(0, i * cellSize, gameOfLife.getGrid().getWidth() * cellSize, i * cellSize);
             }
     }
-
 
     public int getCellSize() {
         return cellSize;

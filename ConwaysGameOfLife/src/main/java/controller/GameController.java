@@ -86,6 +86,9 @@ public class GameController implements ActionListener {
             case SLOW_DOWN:
                 slowDown();
                 break;
+            case EDGE_WRAPPING:
+                edgeWrapping();
+                break;
             }
     }
 
@@ -125,10 +128,14 @@ public class GameController implements ActionListener {
         mouseHandler.getGamePanel().repaint();
     }
     public void stepOver() {
-        System.out.println("Random button clicked");
+        System.out.println("Step over button clicked");
         paused = true;
         gameOfLife.nextGeneration();
         mouseHandler.getGamePanel().repaint();
+    }
+    public void edgeWrapping() {
+        System.out.println("Edge Wrapping button clicked");
+        gameOfLife.toggleEdgeWrapping();
     }
 
     public void gridLines() {

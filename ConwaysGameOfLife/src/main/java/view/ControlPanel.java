@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.event.ActionListener;
 
 public class ControlPanel extends JPanel {
@@ -13,6 +14,8 @@ public class ControlPanel extends JPanel {
     private JButton gridLinesButton;
     private JButton speedUpButton;
     private JButton slowDownButton;
+    private JCheckBox edgeWrappingCheckBox;
+    private JColorChooser colorChooser;
     // we need to add speed up, speed down, show the generation count, and show the current speed
     // display x and y coordinates of the mouse pointer
     // toggle grid lines
@@ -27,6 +30,7 @@ public class ControlPanel extends JPanel {
     public static final String GRID_LINES = "Grid Lines";
     public static final String SPEED_UP = "Speed Up";
     public static final String SLOW_DOWN = "Slow Down";
+    public static final String EDGE_WRAPPING = "Edge Wrapping";
 
     public ControlPanel() {
         // create GUI components
@@ -39,6 +43,8 @@ public class ControlPanel extends JPanel {
         gridLinesButton = new JButton(GRID_LINES);
         speedUpButton = new JButton(SPEED_UP);
         slowDownButton = new JButton(SLOW_DOWN);
+        edgeWrappingCheckBox = new JCheckBox(EDGE_WRAPPING);
+        edgeWrappingCheckBox.setBounds(100, 100, 50, 50);
 
         // add components to container
         add(startButton);
@@ -50,6 +56,7 @@ public class ControlPanel extends JPanel {
         add(gridLinesButton);
         add(speedUpButton);
         add(slowDownButton);
+        add(edgeWrappingCheckBox);
     }
 
     public void addControlListener(ActionListener listener) {
@@ -62,5 +69,6 @@ public class ControlPanel extends JPanel {
         gridLinesButton.addActionListener(listener);
         speedUpButton.addActionListener(listener);
         slowDownButton.addActionListener(listener);
+        edgeWrappingCheckBox.addActionListener(listener);
     }
 }

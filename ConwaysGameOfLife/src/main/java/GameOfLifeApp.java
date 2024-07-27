@@ -119,8 +119,18 @@ public class GameOfLifeApp implements Runnable {
         grid.setCell(12 + x_offset,10 + y_offset, true);
 
 
-
-
+        // horizontal glider
+        grid.setCell(5 + 50, 0 + 40, true);
+        grid.setCell(6 + 50, 1 + 40, true);
+        grid.setCell(6 + 50, 2 + 40, true);
+        grid.setCell(6 + 50, 3 + 40, true);
+        grid.setCell(50, 2 + 40, true);
+        grid.setCell(1 + 50, 3 + 40, true);
+        grid.setCell(2 + 50, 3 + 40, true);
+        grid.setCell(3 + 50, 3 + 40, true);
+        grid.setCell(4 + 50, 3 + 40, true);
+        grid.setCell(5 + 50, 3 + 40, true);
+        grid.setCell(6 + 50, 3 + 40, true);
 
         //GameOfLife gameOfLife = GameOfLife.getInstance();
         GameOfLife gameOfLife = new GameOfLife();
@@ -134,11 +144,8 @@ public class GameOfLifeApp implements Runnable {
         frame.add(gamePanel, BorderLayout.CENTER);
         frame.add(controlPanel, BorderLayout.SOUTH);
 
-
-
         // Make the frame visible
         frame.setVisible(true);
-
         gamePanel.paintComponent(frame.getGraphics());
     }
 }
