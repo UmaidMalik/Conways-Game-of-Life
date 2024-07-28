@@ -1,0 +1,30 @@
+<svg 
+    width="800" 
+    height="800"
+    viewBox="0 0 150 150"
+    fill="color" 
+    xmlns="http://www.w3.org/2000/svg"
+    >
+<rect  x="2" y="4" width="1" height="1" fill="black" />
+<rect  x="4" y="1" width="1" height="1" fill="black" />
+<rect  x="5" y="2" width="1" height="1" fill="black" />
+<rect  x="5" y="3" width="1" height="1" fill="black" />
+<rect  x="5" y="4" width="1" height="1" fill="black" />
+<rect  x="5" y="5" width="1" height="1" fill="black" />
+<rect  x="4" y="5" width="1" height="1" fill="black" />
+<rect  x="3" y="5" width="1" height="1" fill="black" />
+
+<rect  x="102" y="107" width="1" height="1" fill="black" />
+<rect  x="103" y="107" width="1" height="1" fill="black" />
+<rect  x="104" y="107" width="1" height="1" fill="black" />
+<rect  x="100" y="108" width="1" height="1" fill="black" />
+<rect  x="100" y="109" width="1" height="1" fill="black" />
+<rect  x="100" y="110" width="1" height="1" fill="black" />
+<rect  x="105" y="108" width="1" height="1" fill="black" />
+<rect  x="105" y="109" width="1" height="1" fill="black" />
+<rect  x="105" y="110" width="1" height="1" fill="black" />
+<rect  x="102" y="112" width="1" height="1" fill="black" />
+<rect  x="103" y="112" width="1" height="1" fill="black" />
+<rect  x="104" y="112" width="1" height="1" fill="black" />
+
+</svg>
