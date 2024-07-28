@@ -17,7 +17,7 @@ public class GameController implements ActionListener {
     private MouseHandler mouseHandler;
     private ControlPanel controlPanel;
     private int delay_ms = 25;
-    private int delay_ns = 0;
+    private int delay_microsecond = 0;
     private long elapsed_time_ms = 0;
     private long elapsed_time_ns = 0;
     private Thread gameThread;
@@ -31,7 +31,6 @@ public class GameController implements ActionListener {
         this.controlPanel = controlPanel;
 
         mouseHandler = new MouseHandler(gameOfLife, gamePanel);
-        //this.timer = new Timer(delay_ms, this);
         mouseHandler.addMouseListener();
         mouseHandler.addMouseMotionListener();
         controlPanel.addControlListener(this);
@@ -48,7 +47,7 @@ public class GameController implements ActionListener {
                 try {
                     gameOfLife.nextGeneration();
                     mouseHandler.getGamePanel().repaint();
-                    Thread.sleep(delay_ms, delay_ns);
+                    Thread.sleep(delay_ms, delay_microsecond * MICRO_SECONDS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -149,7 +148,7 @@ public class GameController implements ActionListener {
     }
 
     public int getTimeDelayNano() {
-        return delay_ns;
+        return delay_microsecond;
     }
 
     public void setTimeDelayMilli(int delay) {
@@ -157,7 +156,7 @@ public class GameController implements ActionListener {
     }
 
     public void setTimeDelayNano(int delay) {
-        delay_ns = delay;
+        delay_microsecond = delay;
     }
 
     public void slowDown() {
@@ -166,7 +165,9 @@ public class GameController implements ActionListener {
     }
 
     public void speedUp() {
+        if (delay_ms == 0) {
 
+        }
         delay_ms = (int) (0.9 * delay_ms);
         System.out.println("Delay ms: " + delay_ms);
     }

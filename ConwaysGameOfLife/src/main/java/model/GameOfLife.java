@@ -112,9 +112,9 @@ public class GameOfLife extends JPanel {
 
     private void applyGameOfLifeRule(int i, int j, int aliveNeighbours) {
         // game of life rule
-        //setDefaultGameOfLifeRule();
+        setDefaultGameOfLifeRule();
         //setDefaultAmoebaRule();
-        setMyRule();
+        //setMyRule();
         boolean isAlive = grid.getCell(i,j).isAlive();
         boolean shouldSurvive = isAlive && surviveRules.contains(aliveNeighbours); // 2!
         boolean shouldBeBorn = !isAlive && birthRules.contains(aliveNeighbours);
