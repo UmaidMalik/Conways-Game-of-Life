@@ -3,6 +3,7 @@ package model;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,12 +16,16 @@ public class GameOfLife extends JPanel {
     private Set<Integer> surviveRules;
     private Set<Integer> birthRules;
     private boolean isEdgeWrapped;
+    private List<Color> parentColors;
+    private Color backgroundColor;
 
     public GameOfLife() {
         generation = 0;
         surviveRules = new HashSet<>();
         birthRules = new HashSet<>();
         isEdgeWrapped = false;
+        parentColors = new LinkedList<>();
+        backgroundColor = Color.BLACK;
     }
 
     /*
@@ -87,6 +92,7 @@ public class GameOfLife extends JPanel {
             for (int j = 0; j < grid.getHeight(); j++) {
                 int aliveNeighbours = countAliveNeighbors(i, j);
                 applyGameOfLifeRule(i, j, aliveNeighbours);
+                parentColors.clear();
             }
         }
         grid = nextGenerationGrid;
@@ -103,6 +109,7 @@ public class GameOfLife extends JPanel {
                if (!(xCoordinate >= 0 && xCoordinate < grid.getWidth() &&
                        yCoordinate >= 0 && yCoordinate < grid.getHeight())) continue;
                if (!(x == i && y == j) && grid.getCell(xCoordinate, yCoordinate).isAlive()) {
+                   parentColors.add(grid.getCell(xCoordinate, yCoordinate).getColor());
                    aliveNeighbors++;
                }
             }
@@ -115,10 +122,19 @@ public class GameOfLife extends JPanel {
         setDefaultGameOfLifeRule();
         //setDefaultAmoebaRule();
         //setMyRule();
-        boolean isAlive = grid.getCell(i,j).isAlive();
+
+        Color averageParentColor = calculateAverageColorOfParents();
+        boolean isAlive = grid.getCell(i,j).isAlive(); // TODO bug reported as null
         boolean shouldSurvive = isAlive && surviveRules.contains(aliveNeighbours); // 2!
         boolean shouldBeBorn = !isAlive && birthRules.contains(aliveNeighbours);
-        nextGenerationGrid.setCell(i, j, shouldSurvive || shouldBeBorn, grid.getCell(i,j).getColor());
+        if (shouldSurvive) {
+            nextGenerationGrid.setCell(i, j, true, grid.getCell(i,j).getColor());
+        } else if (shouldBeBorn) {
+            nextGenerationGrid.setCell(i, j, true, averageParentColor);
+        } else {
+            nextGenerationGrid.setCell(i, j, false, backgroundColor);
+        }
+        //nextGenerationGrid.setCell(i, j, shouldSurvive || shouldBeBorn, grid.getCell(i,j).getColor());
     }
 
     private void createCopyOfGrid() {
@@ -153,5 +169,33 @@ public class GameOfLife extends JPanel {
 
     public boolean isEdgeWrapped() {
         return isEdgeWrapped;
+    }
+
+    private List<Color> getParentColors() {
+        return parentColors;
+    }
+
+    private Color calculateAverageColorOfParents() {
+        if (parentColors.isEmpty()) return backgroundColor;
+        int red = 0;
+        int green = 0;
+        int blue = 0;
+        for (Color color : parentColors) {
+            red += color.getRed();
+            green += color.getGreen();
+            blue += color.getBlue();
+        }
+        red /= parentColors.size();
+        green /= parentColors.size();
+        blue /= parentColors.size();
+        return new Color(red, green, blue);
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

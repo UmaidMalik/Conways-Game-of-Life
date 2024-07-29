@@ -3,6 +3,7 @@ package controller;
 import model.*;
 import view.*;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -88,6 +89,9 @@ public class GameController implements ActionListener {
             case EDGE_WRAPPING:
                 edgeWrapping();
                 break;
+            case TEST:
+                test();
+                break;
             }
     }
 
@@ -141,6 +145,15 @@ public class GameController implements ActionListener {
         System.out.println("Grid Lines button clicked");
         mouseHandler.getGamePanel().setDisplayGridLines(!mouseHandler.getGamePanel().getDisplayGridLines());
         mouseHandler.getGamePanel().repaint();
+    }
+
+    public void test() {
+        System.out.println("Test button clicked");
+        if (mouseHandler.getDrawColor().equals(Color.BLUE)) {
+            mouseHandler.setDrawColor(Color.RED);
+        } else
+            mouseHandler.setDrawColor(Color.BLUE);
+
     }
 
     public int getTimeDelayMilli() {

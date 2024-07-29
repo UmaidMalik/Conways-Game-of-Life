@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +19,8 @@ public class MouseHandler extends MouseAdapter {
     private boolean drawMode;
     private Point previousPoint;
     private Set<Point> newPoints;
+    private Color drawColor;
+    private Color[] colors = new Color[]{Color.YELLOW, Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED};
 
     public MouseHandler(GameOfLife gameOfLife, GamePanel gamePanel) {
         this.gameOfLife = gameOfLife;
@@ -25,6 +28,7 @@ public class MouseHandler extends MouseAdapter {
         drawMode = true;
         previousPoint = null;
         newPoints = new HashSet<>();
+        drawColor = Color.BLUE;
     }
 
     @Override
@@ -67,7 +71,8 @@ public class MouseHandler extends MouseAdapter {
         int height = gameOfLife.getGrid().getHeight();
         for (Point p : newPoints) {
             if ( p.getX() >= 0 && p.getX() < width && p.getY() >= 0 && p.getY() < height) {
-                gameOfLife.getGrid().setCell(p.getX(), p.getY(), drawMode, Color.BLUE);
+                drawColor = getRandomColor();
+                gameOfLife.getGrid().setCell(p.getX(), p.getY(), drawMode, drawColor);
             }
         }
         newPoints.clear();
@@ -85,6 +90,18 @@ public class MouseHandler extends MouseAdapter {
 
     public void addMouseMotionListener() {
         gamePanel.addMouseMotionListener(this);
+    }
+
+    public void setDrawColor(Color drawColor) {
+        this.drawColor = drawColor;
+    }
+
+    public Color getDrawColor() {
+        return drawColor;
+    }
+
+    public Color getRandomColor() {
+        return colors[(int) (Math.random() * colors.length)];
     }
 }
 
