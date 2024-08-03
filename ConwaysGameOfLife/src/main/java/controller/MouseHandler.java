@@ -13,14 +13,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MouseHandler extends MouseAdapter {
-
+    /* TODO: bug report when running with point overlay put on to screen in sequential order
+        and there the full of life will apply to them before all points are placed on the grid
+        leads to frustrating user experience
+     */
     private GameOfLife gameOfLife;
     private GamePanel gamePanel;
     private boolean drawMode;
     private Point previousPoint;
     private Set<Point> newPoints;
     private Color drawColor;
-    private Color[] colors = new Color[]{Color.YELLOW, Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED};
+    private String drawState;
+    private Color[] colors = new Color[]{Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, new Color(0x8000DE)};
+    private static final String OVERLAY = "OVERLAY";
+    private static final String BRUSH = "BRUSH";
 
     public MouseHandler(GameOfLife gameOfLife, GamePanel gamePanel) {
         this.gameOfLife = gameOfLife;
@@ -29,31 +35,51 @@ public class MouseHandler extends MouseAdapter {
         previousPoint = null;
         newPoints = new HashSet<>();
         drawColor = Color.BLUE;
+        drawState = OVERLAY;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        applyOverlay();
-        previousPoint = new Point(e.getX() / gamePanel.getCellSize(), e.getY() / gamePanel.getCellSize());
-        drawMode = !gameOfLife.getGrid().getCell(previousPoint.getX(), previousPoint.getY()).isAlive();
-        newPoints.clear();
-        updateCellState(previousPoint);
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        Point currentPoint = new Point(e.getX() / gamePanel.getCellSize(), e.getY() / gamePanel.getCellSize());
-        newPoints.add(currentPoint);
-        if (!currentPoint.equals(previousPoint)) {
-            updateCellState(currentPoint);
-            previousPoint = currentPoint;
+        switch (drawState) {
+            case OVERLAY:
+                applyOverlay();
+                previousPoint = new Point(e.getX() / gamePanel.getCellSize(), e.getY() / gamePanel.getCellSize());
+                drawMode = !gameOfLife.getGrid().getCell(previousPoint.getX(), previousPoint.getY()).isAlive();
+                newPoints.clear();
+                updateCellState(previousPoint);
+                break;
+            case BRUSH:
+                
+                break;
         }
     }
 
     @Override
+    public void mouseDragged(MouseEvent e) {
+        switch (drawState) {
+            case OVERLAY:
+                Point currentPoint = new Point(e.getX() / gamePanel.getCellSize(), e.getY() / gamePanel.getCellSize());
+                newPoints.add(currentPoint);
+                if (!currentPoint.equals(previousPoint)) {
+                    updateCellState(currentPoint);
+                    previousPoint = currentPoint;
+                }
+                break;
+            case BRUSH:
+                break;
+        }
+
+    }
+
+    @Override
     public void mouseReleased(MouseEvent e) {
-        previousPoint = null;
-        applyOverlay(); // (if set to false, we use this as a draw hold)
+        switch (drawState) {
+            case OVERLAY:
+                previousPoint = null;
+                applyOverlay();
+                break;
+            case BRUSH:
+        }
     }
 
     private void updateCellState(Point p) {
@@ -69,9 +95,9 @@ public class MouseHandler extends MouseAdapter {
     private void applyOverlay() {
         int width = gameOfLife.getGrid().getWidth();
         int height = gameOfLife.getGrid().getHeight();
+        drawColor = getRandomColor();
         for (Point p : newPoints) {
             if ( p.getX() >= 0 && p.getX() < width && p.getY() >= 0 && p.getY() < height) {
-                drawColor = getRandomColor();
                 gameOfLife.getGrid().setCell(p.getX(), p.getY(), drawMode, drawColor);
             }
         }

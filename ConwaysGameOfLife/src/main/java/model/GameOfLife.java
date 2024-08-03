@@ -2,13 +2,12 @@ package model;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 public class GameOfLife extends JPanel {
     //TODO: Add observer for getting the generation count
+
     private Grid grid;
     private int generation;
     //private static GameOfLife gameOfLife;
@@ -18,6 +17,7 @@ public class GameOfLife extends JPanel {
     private boolean isEdgeWrapped;
     private List<Color> parentColors;
     private Color backgroundColor;
+    private Map<Integer, Color> recentStateChangeMap;
 
     public GameOfLife() {
         generation = 0;
@@ -26,6 +26,7 @@ public class GameOfLife extends JPanel {
         isEdgeWrapped = false;
         parentColors = new LinkedList<>();
         backgroundColor = Color.BLACK;
+        recentStateChangeMap = new HashMap<>();
     }
 
     /*
@@ -86,6 +87,21 @@ public class GameOfLife extends JPanel {
         surviveRules.add(8);
     }
 
+    public void setDryLifeRule() {
+        birthRules.clear();
+        surviveRules.clear();
+        birthRules.add(3);
+        birthRules.add(7);
+        surviveRules.add(2);
+        surviveRules.add(3);
+    }
+
+    public void setSeedRule() {
+        birthRules.clear();
+        surviveRules.clear();
+        birthRules.add(2);
+    }
+
     private void update() {
         createCopyOfGrid();
         for (int i = 0; i < grid.getWidth(); i++) {
@@ -99,8 +115,8 @@ public class GameOfLife extends JPanel {
     }
 
     public int countAliveNeighbors(int i, int j) {
-        int aliveNeighbors = 0;
-        int xCoordinate;
+       int aliveNeighbors = 0;
+       int xCoordinate;
        int yCoordinate;
        for (int x = i - 1; x <= i + 1; x++) {
            for (int y = j - 1; y <= j + 1; y++) {
@@ -120,21 +136,33 @@ public class GameOfLife extends JPanel {
     private void applyGameOfLifeRule(int i, int j, int aliveNeighbours) {
         // game of life rule
         setDefaultGameOfLifeRule();
+        //setDryLifeRule();
         //setDefaultAmoebaRule();
         //setMyRule();
-
+        //setSeedRule();
+        int packedCoordinate;
         Color averageParentColor = calculateAverageColorOfParents();
         boolean isAlive = grid.getCell(i,j).isAlive(); // TODO bug reported as null
-        boolean shouldSurvive = isAlive && surviveRules.contains(aliveNeighbours); // 2!
+        boolean shouldSurvive = isAlive && surviveRules.contains(aliveNeighbours);
         boolean shouldBeBorn = !isAlive && birthRules.contains(aliveNeighbours);
+
         if (shouldSurvive) {
-            nextGenerationGrid.setCell(i, j, true, grid.getCell(i,j).getColor());
+            nextGenerationGrid.setCell(i, j, true, averageParentColor);
         } else if (shouldBeBorn) {
             nextGenerationGrid.setCell(i, j, true, averageParentColor);
+            packedCoordinate = (i & 0x3FFF) | ((j & 0x3FFF) << 14);
+            recentStateChangeMap.put(packedCoordinate, averageParentColor);
         } else {
             nextGenerationGrid.setCell(i, j, false, backgroundColor);
+            if (isAlive) {
+                packedCoordinate = (i & 0x3FFF) | ((j & 0x3FFF) << 14);
+                recentStateChangeMap.put(packedCoordinate, backgroundColor);
+            }
         }
-        //nextGenerationGrid.setCell(i, j, shouldSurvive || shouldBeBorn, grid.getCell(i,j).getColor());
+
+
+
+        //nextGenerationGrid.setCell(i, j, shouldSurvive || shouldBeBorn, averageParentColor);
     }
 
     private void createCopyOfGrid() {
@@ -142,13 +170,19 @@ public class GameOfLife extends JPanel {
         for (int i = 0; i < grid.getWidth(); i++) {
             for (int j = 0; j < grid.getHeight(); j++) {
                 nextGenerationGrid.setNewCell(i, j, new Cell(grid.getCell(i,j).isAlive()),
-                        grid.getCell(i,j).getColor());
+                        grid.getCell(i,j).getColor()); // TODO bug reported as null
             }
         }
+
+        recentStateChangeMap.clear();
     }
 
     public void createGrid(int width, int height) {
         grid = new Grid(width, height);
+    }
+
+    public Map<Integer, Color> getRecentStateChangeMap() {
+        return recentStateChangeMap;
     }
 
     public Grid getGrid() {
@@ -180,14 +214,23 @@ public class GameOfLife extends JPanel {
         int red = 0;
         int green = 0;
         int blue = 0;
+        int rgb = 0;
+        //hsv color model
+        float hue = 0.0f;
+        float saturation = 1.0f;
+        float value = 1.0f;
         for (Color color : parentColors) {
+            //hue = Color.getHSBColor(color.getRed(), color.getGreen(), color.getBlue());
             red += color.getRed();
             green += color.getGreen();
             blue += color.getBlue();
+            rgb += color.getRGB();
         }
-        red /= parentColors.size();
-        green /= parentColors.size();
-        blue /= parentColors.size();
+        red = (int) Math.round((double) red / parentColors.size());
+        green = (int) Math.round((double) green / parentColors.size());
+        blue = (int) Math.round((double) blue / parentColors.size());
+        //rgb = Math.round((float) rgb / parentColors.size());
+
         return new Color(red, green, blue);
     }
 

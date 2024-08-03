@@ -6,7 +6,12 @@ import model.Point;
 
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.geom.Point2D;
+import java.util.Map;
 import java.util.Set;
+import java.awt.geom.AffineTransform;
 
 public class GamePanel extends JPanel {
 
@@ -17,6 +22,9 @@ public class GamePanel extends JPanel {
     private Set<Point> overlay;
     private boolean drawMode;
     private boolean displayGridLines;
+    private int zoom = 0;
+    private int initialZoom;
+    private Point2D.Double zoomCenter;
 
 
     private int index = 0;
@@ -27,18 +35,45 @@ public class GamePanel extends JPanel {
     private Color[] colorsCanadian = {Color.WHITE, Color.RED};
     private Color[] colorsAmerican = {Color.RED, Color.WHITE, Color.BLUE};
     private Color[] colorsIronMan = {Color.RED, Color.ORANGE};
-    private Color[] colorsHue = {Color.RED,  Color.GREEN, Color.BLUE };
+    private Color[] colorsHue = {Color.RED, Color.GREEN, Color.BLUE};
 
     private int getColor(int n) {
         return index++ % n;
     }
 
+    private int flag;
 
     public GamePanel(GameOfLife gameOfLife) {
         this.gameOfLife = gameOfLife;
         this.grid = gameOfLife.getGrid();
-        setCellSize(10);
+        setCellSize(7);
         displayGridLines = false;
+        flag = 3;
+        zoom = cellSize;
+        initialZoom = cellSize;
+        zoomCenter = new Point2D.Double(0, 0);
+        addMouseWheelListener(new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                int notches = e.getWheelRotation();
+                System.out.println("Notches: " + notches);
+                if (notches < 0) {
+                    zoom += 1;
+                } else {
+                    zoom -= 1;
+                }
+                if (zoom < initialZoom) {
+                    zoom = initialZoom;
+                } else if (zoom > 1000) {
+                    zoom = 1000;
+                }
+
+                zoomCenter = new Point2D.Double(e.getPoint().getX(), e.getPoint().getY());
+
+                setCellSize(zoom);
+                repaint();
+            }
+        });
     }
 
     public void setOverlay(Set<Point> overlay, boolean drawMode) {
@@ -46,35 +81,47 @@ public class GamePanel extends JPanel {
         this.drawMode = drawMode;
     }
 
+
     @Override
     public void paintComponent(Graphics g) {
-        //super.paintComponent(g);
+        super.paintComponent(g);
+        //Graphics2D g2d = (Graphics2D) g;
+        //AffineTransform at = g2d.getTransform();
 
-        for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
-            for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
-                if (gameOfLife.getGrid().getCell(i, j).isAlive()) {
-                    //g.setColor(Color.WHITE);
+
+        //at.translate(zoomCenter.getX(), zoomCenter.getY());
+
+
+
+
+        if (flag < 0) {
+            for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
+                for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
                     g.setColor(gameOfLife.getGrid().getCell(i, j).getColor());
-
-                    //g.setColor(colorsFiery[getColor(colorsFiery.length)]);
-                    //g.setColor(colorsGrayScale[getColor(colorsGrayScale.length)]);
-                    //g.setColor(colorsCool[getColor(colorsCool.length)]);
-                    //g.setColor(colorsRainbow[getColor(colorsRainbow.length)]);
-                    //g.setColor(colorsCanadian[getColor(colorsCanadian.length)]);
-                    //g.setColor(colorsAmerican[getColor(colorsAmerican.length)]);
-                    //g.setColor(colorsIronMan[getColor(colorsIronMan.length)]);
-                    //g.setColor(colorsHue[getColor(colorsHue.length)]);
-                } else {
-                    g.setColor(Color.BLACK);
+                    g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
                 }
-                g.fillRect(i*cellSize, j*cellSize, cellSize, cellSize);
             }
         }
+        flag--;
+
+
+        for (Map.Entry<Integer, Color> entry : gameOfLife.getRecentStateChangeMap().entrySet()) {
+            int packedCoordinate = entry.getKey();
+            int x = packedCoordinate & 0x3FFF;
+            int y = (packedCoordinate >> 14) & 0x3FFF;
+            Color state = entry.getValue();
+            g.setColor(state);
+            g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        }
+
         drawOverlay(g);
         if (displayGridLines) {
             drawGridLines(g);
         }
     }
+
+
+
 
     public void drawOverlay(Graphics g) {
         if (overlay != null) {

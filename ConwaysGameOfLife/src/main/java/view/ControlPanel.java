@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class ControlPanel extends JPanel {
@@ -35,7 +36,12 @@ public class ControlPanel extends JPanel {
     public static final String TEST = "Test";
 
     public ControlPanel() {
+
+
+
+
         // create GUI components
+        //FPSMonitor fpsMonitor = new FPSMonitor();
         startButton = new JButton(START);
         stopButton = new JButton(STOP);
         saveButton = new JButton(SAVE);
@@ -50,6 +56,7 @@ public class ControlPanel extends JPanel {
         testButton = new JButton(TEST);
 
         // add components to container
+        //add(fpsMonitor, BorderLayout.EAST);
         add(startButton);
         add(stopButton);
         add(saveButton);
@@ -61,6 +68,7 @@ public class ControlPanel extends JPanel {
         add(slowDownButton);
         add(edgeWrappingCheckBox);
         add(testButton);
+
     }
 
     public void addControlListener(ActionListener listener) {

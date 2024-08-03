@@ -9,7 +9,10 @@ public class Cell {
 
     public Cell(boolean isAlive) {
         this.isAlive = isAlive;
-        this.color = Color.WHITE;
+        if (isAlive)
+            color = Color.WHITE;
+        else
+            color = Color.BLACK;
     }
 
     public void setAlive(boolean isAlive) {

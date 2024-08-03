@@ -21,8 +21,9 @@ public class GameOfLifeApp implements Runnable {
         JFrame frame = new JFrame("Conway's Game of Life");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
-
-        Grid grid = new Grid(256, 144);
+        frame.setResizable(true);
+        //Grid grid = new Grid(2048, 1152);
+        Grid grid = new Grid(512, 288);
         grid.setCell(2, 4, true);
         grid.setCell(4, 1, true);
         grid.setCell(5, 2, true);
