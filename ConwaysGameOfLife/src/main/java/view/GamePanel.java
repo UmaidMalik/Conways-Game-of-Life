@@ -22,7 +22,7 @@ public class GamePanel extends JPanel {
     private Set<Point> overlay;
     private boolean drawMode;
     private boolean displayGridLines;
-    private int zoom = 0;
+    private double zoom = 0;
     private int initialZoom;
     private Point2D.Double zoomCenter;
 
@@ -36,6 +36,7 @@ public class GamePanel extends JPanel {
     private Color[] colorsAmerican = {Color.RED, Color.WHITE, Color.BLUE};
     private Color[] colorsIronMan = {Color.RED, Color.ORANGE};
     private Color[] colorsHue = {Color.RED, Color.GREEN, Color.BLUE};
+    private final int MAX_ZOOM = 1000;
 
     private int getColor(int n) {
         return index++ % n;
@@ -58,19 +59,19 @@ public class GamePanel extends JPanel {
                 int notches = e.getWheelRotation();
                 System.out.println("Notches: " + notches);
                 if (notches < 0) {
-                    zoom += 1;
+                    zoom *= 1.1;
                 } else {
-                    zoom -= 1;
+                    zoom /= 1.1;
                 }
                 if (zoom < initialZoom) {
                     zoom = initialZoom;
-                } else if (zoom > 1000) {
-                    zoom = 1000;
+                } else if (zoom > MAX_ZOOM) {
+                    zoom = MAX_ZOOM;
                 }
 
                 zoomCenter = new Point2D.Double(e.getPoint().getX(), e.getPoint().getY());
 
-                setCellSize(zoom);
+                setCellSize((int) Math.round(zoom));
                 repaint();
             }
         });
@@ -94,17 +95,23 @@ public class GamePanel extends JPanel {
 
 
 
-        if (flag < 0) {
-            for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
-                for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
+
+        for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
+            for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
+                if (gameOfLife.getGrid().getCell(i, j).isAlive())
                     g.setColor(gameOfLife.getGrid().getCell(i, j).getColor());
-                    g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
-                }
+                else
+                    g.setColor(gameOfLife.getBackgroundColor());
+
+
+                g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
         }
-        flag--;
 
 
+
+
+        /*
         for (Map.Entry<Integer, Color> entry : gameOfLife.getRecentStateChangeMap().entrySet()) {
             int packedCoordinate = entry.getKey();
             int x = packedCoordinate & 0x3FFF;
@@ -113,6 +120,8 @@ public class GamePanel extends JPanel {
             g.setColor(state);
             g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
         }
+
+         */
 
         drawOverlay(g);
         if (displayGridLines) {
