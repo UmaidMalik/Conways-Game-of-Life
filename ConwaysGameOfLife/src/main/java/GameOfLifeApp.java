@@ -36,6 +36,7 @@ public class GameOfLifeApp implements Runnable {
         //Grid grid = new Grid(256, 144);
         Grid grid = new Grid(512, 267);
 
+
         grid.setCell(2, 4, state, cellColor);
         grid.setCell(4, 1, state, cellColor);
         grid.setCell(5, 2, state, cellColor);
