@@ -12,7 +12,7 @@ public class Grid {
         this.width = width;
         this.height = height;
         initializeGrid();
-        maxCellState = 3;
+        maxCellState = 2;
     }
 
     public void initializeGrid() {

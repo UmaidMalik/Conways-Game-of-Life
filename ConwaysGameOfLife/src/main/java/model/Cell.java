@@ -37,6 +37,10 @@ public class Cell {
         return cellState == 1;
     }
 
+    public boolean isDead() {
+        return cellState == 0;
+    }
+
     public void setColor(Color color) {
         this.color = color;
     }

@@ -78,7 +78,17 @@ public class GameOfLife extends JPanel {
     public void setBriansBrainRule() {
         birthRules.clear();
         surviveRules.clear();
-        birthRules.add(2);
+        //birthRules.add(2);
+
+        birthRules.add(3);
+        birthRules.add(4);
+        birthRules.add(5);
+        birthRules.add(7);
+
+        surviveRules.add(2);
+        surviveRules.add(3);
+        surviveRules.add(6);
+        surviveRules.add(7);
     }
 
     public void setMyRule() {
@@ -142,7 +152,7 @@ public class GameOfLife extends JPanel {
 
     private void applyGameOfLifeRule(int i, int j, int aliveNeighbours) {
         // game of life rule
-        //setDefaultGameOfLifeRule();
+        setDefaultGameOfLifeRule();
         //setDryLifeRule();
         //setDefaultAmoebaRule();
         //setMyRule();
@@ -151,17 +161,19 @@ public class GameOfLife extends JPanel {
         int packedCoordinate;
         Color averageParentColor = calculateAverageColorOfParents();
         boolean isAlive = grid.getCell(i,j).isAlive(); // TODO bug reported as null
+        boolean isDead = grid.getCell(i,j).isDead();
         boolean shouldSurvive = isAlive && surviveRules.contains(aliveNeighbours);
         boolean shouldBeBorn = !isAlive && birthRules.contains(aliveNeighbours);
 
         int cellState = grid.getCell(i,j).getState();
-        if (cellState == 0 && aliveNeighbours == 2) {
+        if (isDead && birthRules.contains(aliveNeighbours)) {
             nextGenerationGrid.setCell(i, j, 1, averageParentColor);
 
-        } else if (cellState == 0) {
+        } else if (isDead /*&& !birthRules.contains(aliveNeighbours)*/) {
             nextGenerationGrid.setCell(i, j, 0, backgroundColor);
-        }
-        else {
+        } else if (isAlive && surviveRules.contains(aliveNeighbours)) {
+            nextGenerationGrid.setCell(i, j, 1, averageParentColor);
+        } else {
             nextGenerationGrid.setCell(i, j, ++cellState%grid.getMaxCellState(), averageParentColor);
         }
 
