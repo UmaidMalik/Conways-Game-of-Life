@@ -18,6 +18,7 @@ public class GameOfLife extends JPanel {
     private List<Color> parentColors;
     private Color backgroundColor;
     private Map<Integer, Color> recentStateChangeMap;
+    private float colorSaturation = 0.9f;
 
     public GameOfLife() {
         generation = 0;
@@ -72,6 +73,12 @@ public class GameOfLife extends JPanel {
         surviveRules.add(3);
         surviveRules.add(5);
         surviveRules.add(8);
+    }
+
+    public void setBriansBrainRule() {
+        birthRules.clear();
+        surviveRules.clear();
+        birthRules.add(2);
     }
 
     public void setMyRule() {
@@ -135,10 +142,11 @@ public class GameOfLife extends JPanel {
 
     private void applyGameOfLifeRule(int i, int j, int aliveNeighbours) {
         // game of life rule
-        setDefaultGameOfLifeRule();
+        //setDefaultGameOfLifeRule();
         //setDryLifeRule();
         //setDefaultAmoebaRule();
         //setMyRule();
+        //setBriansBrainRule();
         //setSeedRule();
         int packedCoordinate;
         Color averageParentColor = calculateAverageColorOfParents();
@@ -146,19 +154,36 @@ public class GameOfLife extends JPanel {
         boolean shouldSurvive = isAlive && surviveRules.contains(aliveNeighbours);
         boolean shouldBeBorn = !isAlive && birthRules.contains(aliveNeighbours);
 
-        if (shouldSurvive) {
-            nextGenerationGrid.setCell(i, j, true, averageParentColor);
-        } else if (shouldBeBorn) {
-            nextGenerationGrid.setCell(i, j, true, averageParentColor);
-            packedCoordinate = (i & 0x3FFF) | ((j & 0x3FFF) << 14);
-            recentStateChangeMap.put(packedCoordinate, averageParentColor);
-        } else {
-            nextGenerationGrid.setCell(i, j, false, backgroundColor);
-            if (isAlive) {
-                packedCoordinate = (i & 0x3FFF) | ((j & 0x3FFF) << 14);
-                recentStateChangeMap.put(packedCoordinate, backgroundColor);
-            }
+        int cellState = grid.getCell(i,j).getState();
+        if (cellState == 0 && aliveNeighbours == 2) {
+            nextGenerationGrid.setCell(i, j, 1, averageParentColor);
+
+        } else if (cellState == 0) {
+            nextGenerationGrid.setCell(i, j, 0, backgroundColor);
         }
+        else {
+            nextGenerationGrid.setCell(i, j, ++cellState%grid.getMaxCellState(), averageParentColor);
+        }
+
+        /*
+        if (shouldSurvive) {
+            nextGenerationGrid.setCell(i, j, 1, averageParentColor);
+        } else if (shouldBeBorn) {
+            nextGenerationGrid.setCell(i, j, 1, averageParentColor);
+            //packedCoordinate = (i & 0x3FFF) | ((j & 0x3FFF) << 14);
+            //recentStateChangeMap.put(packedCoordinate, averageParentColor);
+        } else {
+            nextGenerationGrid.setCell(i, j, 0, backgroundColor);
+
+            //if (isAlive) {
+               // packedCoordinate = (i & 0x3FFF) | ((j & 0x3FFF) << 14);
+              //  recentStateChangeMap.put(packedCoordinate, backgroundColor);
+            //}
+
+
+        }
+
+         */
 
 
 
@@ -169,7 +194,7 @@ public class GameOfLife extends JPanel {
         nextGenerationGrid = new Grid(grid.getWidth(), grid.getHeight());
         for (int i = 0; i < grid.getWidth(); i++) {
             for (int j = 0; j < grid.getHeight(); j++) {
-                nextGenerationGrid.setNewCell(i, j, new Cell(grid.getCell(i,j).isAlive()),
+                nextGenerationGrid.setNewCell(i, j, new Cell(grid.getCell(i,j).getState()),
                         grid.getCell(i,j).getColor()); // TODO bug reported as null
             }
         }
@@ -229,9 +254,11 @@ public class GameOfLife extends JPanel {
         red = (int) Math.round((double) red / parentColors.size());
         green = (int) Math.round((double) green / parentColors.size());
         blue = (int) Math.round((double) blue / parentColors.size());
-        //rgb = Math.round((float) rgb / parentColors.size());
+        float[] hsvData = Color.RGBtoHSB(red, green, blue, null);
 
-        return new Color(red, green, blue);
+        //rgb = Math.round((float) rgb / parentColors.size());
+        //return new Color(red, green, blue);
+        return Color.getHSBColor(hsvData[0], colorSaturation, 1.0f);
     }
 
     public Color getBackgroundColor() {

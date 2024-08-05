@@ -26,7 +26,6 @@ public class GamePanel extends JPanel {
     private int initialZoom;
     private Point2D.Double zoomCenter;
 
-
     private int index = 0;
     private Color[] colorsFiery = {Color.RED, Color.YELLOW, Color.ORANGE};
     private Color[] colorsCool = {Color.BLUE, Color.CYAN, Color.WHITE};
@@ -47,7 +46,7 @@ public class GamePanel extends JPanel {
     public GamePanel(GameOfLife gameOfLife) {
         this.gameOfLife = gameOfLife;
         this.grid = gameOfLife.getGrid();
-        setCellSize(7);
+        setCellSize(6);
         displayGridLines = false;
         flag = 3;
         zoom = cellSize;
@@ -98,10 +97,10 @@ public class GamePanel extends JPanel {
 
         for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
             for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
-                if (gameOfLife.getGrid().getCell(i, j).isAlive())
-                    g.setColor(gameOfLife.getGrid().getCell(i, j).getColor());
-                else
+                if (!gameOfLife.getGrid().getCell(i, j).isAlive())
                     g.setColor(gameOfLife.getBackgroundColor());
+                else
+                    g.setColor(gameOfLife.getGrid().getCell(i, j).getColor());
 
 
                 g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);

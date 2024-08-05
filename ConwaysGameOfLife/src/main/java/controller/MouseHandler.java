@@ -24,7 +24,7 @@ public class MouseHandler extends MouseAdapter {
     private Set<Point> newPoints;
     private Color drawColor;
     private String drawState;
-    private Color[] colors = new Color[]{Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, new Color(0x8000DE)};
+    private Color[] colors = new Color[]{Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, new Color(0x8000DE),};
     private static final String OVERLAY = "OVERLAY";
     private static final String BRUSH = "BRUSH";
 

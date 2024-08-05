@@ -3,24 +3,38 @@ package model;
 import java.awt.*;
 
 public class Cell {
-    boolean isAlive;
+    //boolean isAlive;
     Color color;
+    int cellState;
 
 
-    public Cell(boolean isAlive) {
-        this.isAlive = isAlive;
-        if (isAlive)
-            color = Color.WHITE;
-        else
+    public Cell(int cellState) {
+        this.cellState = cellState;
+        if (cellState == 0)
             color = Color.BLACK;
+        else
+            color = Color.WHITE;
+
     }
 
-    public void setAlive(boolean isAlive) {
-        this.isAlive = isAlive;
+    public void setState(int state) {
+        cellState = state;
+    }
+
+    public void nextState() {
+        cellState++;
+    }
+
+    public int getState() {
+        return cellState;
+    }
+
+    public boolean isState(int state) {
+        return cellState == state;
     }
 
     public boolean isAlive() {
-        return isAlive;
+        return cellState == 1;
     }
 
     public void setColor(Color color) {
