@@ -164,7 +164,7 @@ public class GameOfLifeApp implements Runnable {
         grid.setCell(6 + 50, 3 + 40, state);
 
         //GameOfLife gameOfLife = GameOfLife.getInstance();
-        GameOfLife gameOfLife = new GameOfLife();
+        GameOfLife gameOfLife = new GameOfLife(grid);
         ControlPanel controlPanel = new ControlPanel();
         gameOfLife.setGrid(grid);
         GamePanel gamePanel = new GamePanel(gameOfLife);
