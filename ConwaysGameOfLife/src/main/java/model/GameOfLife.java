@@ -225,8 +225,7 @@ public class GameOfLife extends JPanel {
         if (shouldBeBorn) {
             nextGenerationGrid.setCell(i, j, 1, averageParentColor);
         } else if (isDead) {
-            Color c = new Color(Math.max((int)(deadColor.getRed()  *0.75f), 0), Math.max((int)(deadColor.getGreen()*0.75f), 0), Math.max((int)(deadColor.getBlue() *0.75f), 0),
-                    255);
+            Color c = new Color(Math.max((int)(deadColor.getRed()  *0.99f), 0), Math.max((int)(deadColor.getGreen()*0.99f), 0), Math.max((int)(deadColor.getBlue() *0.99f), 0));
             nextGenerationGrid.setCell(i, j, 0, c);
         } else if (shouldSurvive) {
             nextGenerationGrid.setCell(i, j, 1, averageParentColor);
