@@ -90,10 +90,11 @@ public class GamePanel extends JPanel {
         AffineTransform oldTransform = g2d.getTransform();
 
         AffineTransform zoomTransform = new AffineTransform();
-        zoomTransform.translate(zoomCenter.x, zoomCenter.y);
-        zoomTransform.scale(cellSize, cellSize);
-        zoomTransform.translate(-zoomCenter.x, -zoomCenter.y);
+        //zoomTransform.translate(zoomCenter.x, zoomCenter.y);
+        //zoomTransform.scale();
+        //zoomTransform.translate(-zoomCenter.x, -zoomCenter.y);
         g2d.transform(zoomTransform);
+
 
 
         Color cellColor;
