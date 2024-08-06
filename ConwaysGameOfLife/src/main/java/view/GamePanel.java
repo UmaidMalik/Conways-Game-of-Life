@@ -84,22 +84,23 @@ public class GamePanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        //Graphics2D g2d = (Graphics2D) g;
-        //AffineTransform at = g2d.getTransform();
+        Graphics2D g2d = (Graphics2D) g;
+        super.paintComponent(g2d);
 
+        AffineTransform oldTransform = g2d.getTransform();
 
-        //at.translate(zoomCenter.getX(), zoomCenter.getY());
-
-
-
+        AffineTransform zoomTransform = new AffineTransform();
+        zoomTransform.translate(zoomCenter.x, zoomCenter.y);
+        zoomTransform.scale(zoom, zoom);
+        zoomTransform.translate(-zoomCenter.x, -zoomCenter.y);
+        g2d.transform(zoomTransform);
 
 
         Color cellColor;
         for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
             for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
                 cellColor = gameOfLife.getGrid().getCell(i, j).getColor();
-                g.setColor(cellColor);
+                g2d.setColor(cellColor);
                 /*
                 if (gameOfLife.getGrid().getCell(i, j).isAlive())
                     g.setColor(cellColor);
@@ -114,8 +115,10 @@ public class GamePanel extends JPanel {
 
 
 
-                g.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                g2d.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
+
+
         }
 
 
@@ -133,35 +136,36 @@ public class GamePanel extends JPanel {
 
          */
 
-        drawOverlay(g);
+        g2d.setTransform(oldTransform);
+        drawOverlay(g2d);
         if (displayGridLines) {
-            drawGridLines(g);
+            drawGridLines(g2d);
         }
     }
 
 
 
 
-    public void drawOverlay(Graphics g) {
+    public void drawOverlay(Graphics2D g2d) {
         if (overlay != null) {
             for (Point p : overlay) {
-                g.setColor(Color.CYAN);
+                g2d.setColor(Color.CYAN);
                 if (!displayGridLines) {
-                    g.drawRect(p.getX() * cellSize, p.getY() * cellSize, cellSize, cellSize);
+                    g2d.drawRect(p.getX() * cellSize, p.getY() * cellSize, cellSize, cellSize);
                 } else {
-                    g.fill3DRect(p.getX() * cellSize, p.getY() * cellSize, cellSize, cellSize, false);
+                    g2d.fill3DRect(p.getX() * cellSize, p.getY() * cellSize, cellSize, cellSize, false);
                 }
             }
         }
     }
 
-    public void drawGridLines(Graphics g) {
-            g.setColor(Color.GRAY);
+    public void drawGridLines(Graphics2D g2d) {
+            g2d.setColor(Color.GRAY);
             for (int i = 0; i <= gameOfLife.getGrid().getWidth(); i++) {
-                g.drawLine(i * cellSize, 0, i * cellSize, gameOfLife.getGrid().getHeight() * cellSize);
+                g2d.drawLine(i * cellSize, 0, i * cellSize, gameOfLife.getGrid().getHeight() * cellSize);
             }
             for (int i = 0; i <= gameOfLife.getGrid().getHeight(); i++) {
-                g.drawLine(0, i * cellSize, gameOfLife.getGrid().getWidth() * cellSize, i * cellSize);
+                g2d.drawLine(0, i * cellSize, gameOfLife.getGrid().getWidth() * cellSize, i * cellSize);
             }
     }
 
