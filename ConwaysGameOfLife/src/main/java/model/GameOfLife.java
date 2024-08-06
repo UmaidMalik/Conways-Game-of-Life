@@ -210,9 +210,9 @@ public class GameOfLife extends JPanel {
         //setBannersRule();
         //setCootiesRule();
         //setDefaultGameOfLifeRule();
-        //setBriansBrainRule();
+        setBriansBrainRule();
         //setFredkinRule();
-        setGnarlRule();
+        //setGnarlRule();
         int packedCoordinate;
         Color averageParentColor = calculateAverageColorOfParents(i, j);
         Color deadColor = grid.getCell(i,j).getColor();

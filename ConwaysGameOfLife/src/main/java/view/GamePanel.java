@@ -95,16 +95,22 @@ public class GamePanel extends JPanel {
 
 
 
+        Color cellColor;
         for (int i = 0; i < gameOfLife.getGrid().getWidth(); i++) {
             for (int j = 0; j < gameOfLife.getGrid().getHeight(); j++) {
-                Color cellColor = gameOfLife.getGrid().getCell(i, j).getColor();
+                cellColor = gameOfLife.getGrid().getCell(i, j).getColor();
+                g.setColor(cellColor);
+                /*
                 if (gameOfLife.getGrid().getCell(i, j).isAlive())
                     g.setColor(cellColor);
                 else if (!gameOfLife.getGrid().getCell(i, j).isAlive() && !gameOfLife.getGrid().getCell(i, j).isDead())
-                    g.setColor(new Color(cellColor.getRed()/2, cellColor.getGreen()/2, cellColor.getBlue()/2));
+                    //g.setColor(new Color(cellColor.getRed()/2, cellColor.getGreen()/2, cellColor.getBlue()/2));
+                    g.setColor(cellColor);
                 else {
                     g.setColor(cellColor);
                 }
+
+                 */
 
 
 
