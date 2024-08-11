@@ -19,6 +19,8 @@ public class GameOfLife extends JPanel {
     private Color backgroundColor;
     private Map<Integer, Color> recentStateChangeMap;
     private float colorSaturation = 0.9f;
+    private float colorDecay = 0.9999f;
+    private int range = 1;
 
     public GameOfLife() {
         generation = 0;
@@ -174,6 +176,19 @@ public class GameOfLife extends JPanel {
 
     }
 
+    public void setBoscosRule() {
+        birthRules.clear();
+        surviveRules.clear();
+        grid.setMaxCellState(2);
+        range = 5;
+        for (int i = 34; i <= 45; i++) {
+            birthRules.add(i);
+        }
+        for (int i = 33; i <= 57; i++) {
+            surviveRules.add(i);
+        }
+    }
+
     private void update() {
         createCopyOfGrid();
         for (int i = 0; i < grid.getWidth(); i++) {
@@ -190,8 +205,10 @@ public class GameOfLife extends JPanel {
        int aliveNeighbors = 0;
        int xCoordinate;
        int yCoordinate;
-       for (int x = i - 1; x <= i + 1; x++) {
-           for (int y = j - 1; y <= j + 1; y++) {
+
+
+       for (int x = i - range; x <= i + range; x++) {
+           for (int y = j - range; y <= j + range; y++) {
                xCoordinate = (isEdgeWrapped) ? ((x + grid.getWidth()) % grid.getWidth()) : x;
                yCoordinate = (isEdgeWrapped) ? ((y + grid.getHeight()) % grid.getHeight()) : y;
                if (!(xCoordinate >= 0 && xCoordinate < grid.getWidth() &&
@@ -208,12 +225,14 @@ public class GameOfLife extends JPanel {
     private void applyGameOfLifeRule(int i, int j, int aliveNeighbours) {
         // game of life rule
         //setBannersRule();
-        setCootiesRule();
+        //setCootiesRule();
         //setDefaultGameOfLifeRule();
         //setBriansBrainRule();
         //setFredkinRule();
-        //setGnarlRule();
+        setGnarlRule();
         //setDryLifeRule();
+        //setMyRule();
+        //setBoscosRule();
         int packedCoordinate;
         Color averageParentColor = calculateAverageColorOfParents(i, j);
         Color deadColor = grid.getCell(i,j).getColor();
@@ -226,7 +245,9 @@ public class GameOfLife extends JPanel {
         if (shouldBeBorn) {
             nextGenerationGrid.setCell(i, j, 1, averageParentColor);
         } else if (isDead) {
-            Color c = new Color(Math.max((int)(deadColor.getRed()  *0.999999f), 0), Math.max((int)(deadColor.getGreen()*0.999999f), 0), Math.max((int)(deadColor.getBlue() *0.999999f), 0));
+            Color c = new Color(Math.max((int)(deadColor.getRed() * colorDecay), 0),
+                                Math.max((int)(deadColor.getGreen() * colorDecay), 0),
+                                Math.max((int)(deadColor.getBlue() * colorDecay), 0));
             nextGenerationGrid.setCell(i, j, 0, c);
         } else if (shouldSurvive) {
             nextGenerationGrid.setCell(i, j, 1, averageParentColor);
@@ -304,8 +325,9 @@ public class GameOfLife extends JPanel {
     }
 
     private Color calculateAverageColorOfParents(int i, int j) {
-        if (parentColors.isEmpty()) return new Color(Math.max((int)(grid.getCell(i, j).getColor().getRed()  *0.99f), 0), Math.max((int)(grid.getCell(i, j).getColor().getGreen()*0.99f), 0), Math.max((int)(grid.getCell(i, j).getColor().getBlue() *0.99f), 0),
-                255);
+        if (parentColors.isEmpty()) return new Color(Math.max((int)(grid.getCell(i, j).getColor().getRed() * colorDecay), 0),
+                                                    Math.max((int)(grid.getCell(i, j).getColor().getGreen() * colorDecay), 0),
+                                                    Math.max((int)(grid.getCell(i, j).getColor().getBlue() * colorDecay), 0));
         int red = 0;
         int green = 0;
         int blue = 0;

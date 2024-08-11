@@ -25,16 +25,16 @@ public class GameOfLifeApp implements Runnable {
         frame.setResizable(true);
         Color cellColor = Color.WHITE;
 
-        int X, Y, R;
+        int X, R;
         R = 200;
         int state = 1;
 
 
 
         //Grid grid = new Grid(2048, 1152);
-        //Grid grid = new Grid(512, 288);
-        //Grid grid = new Grid(256, 144);
-        Grid grid = new Grid(512, 267);
+        //Grid grid = new Grid(1024, 536);
+        Grid grid = new Grid(256, 144);
+        //Grid grid = new Grid(512, 267);
 
 
         grid.setCell(2, 4, state, cellColor);

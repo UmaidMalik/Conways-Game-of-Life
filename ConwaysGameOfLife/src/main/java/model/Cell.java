@@ -3,9 +3,9 @@ package model;
 import java.awt.*;
 
 public class Cell {
-    //boolean isAlive;
-    Color color;
-    int cellState;
+    private Color color;
+    private int cellState;
+    private long cellData;
 
 
     public Cell(int cellState) {
