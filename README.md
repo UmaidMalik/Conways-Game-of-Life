@@ -18,17 +18,3 @@
     git clone https://github.com/yourusername/your-repository.git
     ```
 
-3. **Navigate to the project directory**:
-    ```bash
-    cd your-repository
-    ```
-
-4. **Build the project**:
-    ```bash
-    ./gradlew build
-    ```
-
-5. **Run the project**:
-    ```bash
-    ./gradlew run
-    ```
