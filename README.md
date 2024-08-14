@@ -15,6 +15,6 @@
 
 2. **Clone the repository**:
     ```bash
-    git clone https://github.com/yourusername/your-repository.git
+    git clone https://github.com/UmaidMalik/Conways-Game-of-Life.git
     ```
 
