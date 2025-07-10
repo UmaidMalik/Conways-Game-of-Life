@@ -1,5 +1,8 @@
 # Colorful Cellular Automata
 
+## Images
+
+
 ## Status
 
 **⚠️ This project is currently in development.**
