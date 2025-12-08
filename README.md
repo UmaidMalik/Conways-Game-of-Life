@@ -15,7 +15,8 @@
 
 ## Status
 
-**⚠️ This project is currently in development.**
+**⚠️ Development for this project has been moved over to:**
+https://github.com/UmaidMalik/cellular-automata-sdl
 > **Note:** This project is a work in progress and may not be fully functional. New features, improvements, and fixes are actively being worked on. Check back later for updates!
 
 ## Description
